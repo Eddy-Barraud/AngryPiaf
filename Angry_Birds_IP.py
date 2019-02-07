@@ -6,7 +6,7 @@ from math import asin
 pygame.init()
 surface = pygame.display.set_mode((500, 500), pygame.RESIZABLE)
 pygame.display.set_caption("Test controle")
-#clock = pygame.time.Clock()
+clock = pygame.time.Clock()
 #clock.tick(20)
 
 # Variables globales
@@ -38,11 +38,11 @@ def loop():
         # Si l'utilisateur redimensionne la fenêtre
         elif event.type == pygame.VIDEORESIZE:
             surface = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-        #elif event.type == pygame.MOUSEBUTTONUP and verif:
-        #    trajectoire()
+        elif event.type == pygame.MOUSEBUTTONUP and verif:
+            move()
         
-    #if pygame.mouse.get_pressed() != (1, 0, 0) :
-    #    pygame.time.wait(50)
+    if pygame.mouse.get_pressed() != (1, 0, 0) :
+        pygame.time.wait(50)
     #pygame.event.wait()
 
 ###------------------------------------------------------------------------------------------------------------###
@@ -116,14 +116,15 @@ def trajectoire():
     ### INI
     #On enregistre le point de laché de la souris
     global coord
-    x0,y0=coord[0],500-coord[1]
+    x0,y0=coord[0],350-coord[1]
     x1,y1=153, 150 #emplacement de l'origine de l'élastique
     m=2
-    k=100
+    k=10
     L0=20
     e=5/9
     g=9.81
     angle=asin(sintheta(x0,y0,x1,y1))
+    totalTime=0
 
 
     ## Avant rebond -> equation de trajectoire parabolique
@@ -143,12 +144,12 @@ def trajectoire():
 
     #Tf=solve(Y==0,t)[0].right().n()
     Tf=(v0y+sqrt(v0y**2+2*g*y0))/g
-
+    totalTime+=Tf
     T=0
     P=[]
     while T <= Tf:
         P+=[[X(T),Y(T)]]
-        T+=0.200
+        T+=0.100
     P+=[[X(Tf),Y(Tf)]]
     ## Après rebond
     ## On recalcule des equations de trajectoires après application d'un coefficient de restitution
@@ -167,11 +168,11 @@ def trajectoire():
         def Xr(t):
             return v0x*t+lastX
         Tf=(v0y+sqrt(v0y**2))/g #On estime que l'on part de l'ordonnée 0 (pas +v0y...)
-        
+        totalTime+=Tf
         T=0
         while T <= Tf:
             P+=[[Xr(T),Yr(T)]]
-            T+=0.200
+            T+=0.100
         P+=[[Xr(Tf),Yr(Tf)]]
         r+=1
     #On affiche la liste de points et l'élastique
@@ -179,10 +180,46 @@ def trajectoire():
     #print(len(P))
     
     for i in range(len(P)):
-        P[i][1]=500-P[i][1]
+        P[i][1]=350-P[i][1]
     
     pygame.draw.lines(surface, (0,0,0), False, P, 3)
+    return [P,totalTime]
     #pygame.display.update()
+###------------------------------------------------------------------------------------------------------------###
+###------------------------------------------------------------------------------------------------------------###
+# Fonction éponyme...
+def move():
+    P,totalTime=trajectoire()
+    pas=totalTime/len(P)
+    #fps=1/pas
+    #print(fps)
+    #t=0
+    #i=0
+    #while t<=totalTime :
+    #    # On refill la surface en blanc afin d'effacer toutes les images du tic précédent
+    #    surface.fill((255, 255, 255))
+    #    # Catapulte d'arrière plan
+    #    surface.blit(catapulteArriere, (175, 150))
+    #    # Catapulte à l'avant
+    #    surface.blit(catapulteAvant, (148, 142))
+    #    surface.blit(bird, P[i])
+    #
+    #
+    #    # Affichage sur l'écran de tout ce qu'on a fait précédemment
+    #    pygame.display.update()
+    #    pygame.time.wait(100)
+    #    t+=pas
+    #    i+=1
+    for i in P:
+        #clock.tick(fps)
+        surface.fill((255, 255, 255))
+        surface.blit(catapulteArriere, (175, 150))
+        surface.blit(catapulteAvant, (148, 142))
+        surface.blit(bird, i)
+        pygame.display.update()
+        pygame.time.wait(10)
+
+
 ###------------------------------------------------------------------------------------------------------------###
 # Boucle draw qui tourne en continu afin de lancer toutes les fonctions à chaque tics
 while True:
