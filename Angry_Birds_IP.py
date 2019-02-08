@@ -4,7 +4,7 @@ from math import asin
 
 # Initialisation global pygame
 pygame.init()
-surface = pygame.display.set_mode((500, 500), pygame.RESIZABLE)
+surface = pygame.display.set_mode((1400, 500), pygame.RESIZABLE)
 pygame.display.set_caption("Test controle")
 clock = pygame.time.Clock()
 #clock.tick(20)
@@ -216,9 +216,9 @@ def move():
         surface.fill((255, 255, 255))
         surface.blit(catapulteArriere, (175, 150))
         surface.blit(catapulteAvant, (148, 142))
-        surface.blit(bird, i)
+        surface.blit(bird, (i[0],i[1]-44))
         pygame.display.update()
-        pygame.time.wait(10)
+        pygame.time.wait(5)
 
 
 ###------------------------------------------------------------------------------------------------------------###
