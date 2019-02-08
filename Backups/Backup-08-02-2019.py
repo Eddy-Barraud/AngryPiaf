@@ -5,8 +5,9 @@ from math import asin
 # Initialisation global pygame
 pygame.init()
 surface = pygame.display.set_mode((1400, 500), pygame.RESIZABLE)
-pygame.display.set_caption("Angry Piaf ;)")
+pygame.display.set_caption("Test controle")
 clock = pygame.time.Clock()
+#clock.tick(20)
 
 # Variables globales
 verif = False
@@ -45,8 +46,7 @@ def loop():
 
     # Fonction pour économiser du CPU quand il ne se passe rien
     if pygame.mouse.get_pressed() != (1, 0, 0) and inMove == False:
-        #pygame.time.wait(50)
-        clock.tick(30)
+        pygame.time.wait(50)
 
 ###------------------------------------------------------------------------------------------------------------###
 # Fonction qui vérifie si on a "attrapé" l'oiseau
@@ -191,21 +191,18 @@ def move():
     global inMove
     inMove=True
     P,totalTime=trajectoire()
-    print("distance parcourue en m: "+str(P[-1][0]))
-    print("total points :"+str(len(P)))
-    print("total time"+str(totalTime))
-    fps=totalTime/len(P)
-    print(fps)
-
+    pas=totalTime/len(P)
+    #fps=1/pas
+            
     for i in P:
-        clock.tick(60)
+        #clock.tick(fps)
         surface.fill((255, 255, 255))
         surface.blit(catapulteArriere, (175, 150))
         surface.blit(catapulteAvant, (148, 142))
         surface.blit(bird, (i[0],i[1]-44)) # On décale le y de 44=hauteur de l'oiseau
         pygame.display.update()
         loop()
-        #pygame.time.wait(5)
+        pygame.time.wait(5)
 
     inMove=False
 
