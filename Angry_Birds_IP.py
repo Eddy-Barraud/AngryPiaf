@@ -193,23 +193,24 @@ def move():
     pas=totalTime/len(P)
     #fps=1/pas
     #print(fps)
-    #t=0
-    #i=0
-    #while t<=totalTime :
-    #    # On refill la surface en blanc afin d'effacer toutes les images du tic précédent
-    #    surface.fill((255, 255, 255))
-    #    # Catapulte d'arrière plan
-    #    surface.blit(catapulteArriere, (175, 150))
-    #    # Catapulte à l'avant
-    #    surface.blit(catapulteAvant, (148, 142))
-    #    surface.blit(bird, P[i])
-    #
-    #
-    #    # Affichage sur l'écran de tout ce qu'on a fait précédemment
-    #    pygame.display.update()
-    #    pygame.time.wait(100)
-    #    t+=pas
-    #    i+=1
+    '''t=0
+    i=0
+    while t<=totalTime :
+        # On refill la surface en blanc afin d'effacer toutes les images du tic précédent
+        surface.fill((255, 255, 255))
+        # Catapulte d'arrière plan
+        surface.blit(catapulteArriere, (175, 150))
+        # Catapulte à l'avant
+        surface.blit(catapulteAvant, (148, 142))
+        surface.blit(bird, P[i])
+    
+    
+        # Affichage sur l'écran de tout ce qu'on a fait précédemment
+        pygame.display.update()
+        pygame.time.wait(100)
+        t+=pas
+        i+=1'''
+        
     for i in P:
         #clock.tick(fps)
         surface.fill((255, 255, 255))
