@@ -191,11 +191,11 @@ def move():
     global inMove
     inMove=True
     P,totalTime=trajectoire()
-    print("distance parcourue en m: "+str(P[-1][0]))
+    print("distance parcourue en m : "+str(P[-1][0]))
     print("total points :"+str(len(P)))
-    print("total time"+str(totalTime))
+    print("total time : "+str(totalTime))
     fps=1/(totalTime/len(P))
-    print(fps)
+    print("fps : "+str(fps))
 
     for i in P:
         clock.tick(fps)
