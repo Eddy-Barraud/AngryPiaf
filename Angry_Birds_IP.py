@@ -11,6 +11,7 @@ clock = pygame.time.Clock()
 
 # Variables globales
 verif = False
+inMove = False
 coord= ()
 # Sprites Sheets
 assets = pygame.image.load('image/assets.png').convert_alpha()
@@ -21,9 +22,10 @@ catapulteAvant = assets.subsurface(833, 0, 43, 126)
 catapulteArriere = assets.subsurface(0, 0, 38, 200)
 
 ###------------------------------------------------------------------------------------------------------------###
-# Pygame loop qui va chercher un évènement (souris, clavier, etc) tous les tics
+# Pygame loop qui va chercher un évènement (souris, clavier, etc) tous les tics et démarrer le lancé
 def loop():
     global verif
+    global inMove
     # Fausse boucle for afin de récupérer les évènements
     for event in pygame.event.get():
         # Cas du déclenchement de la croix de la fenêtre
@@ -38,12 +40,13 @@ def loop():
         # Si l'utilisateur redimensionne la fenêtre
         elif event.type == pygame.VIDEORESIZE:
             surface = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+        # Des qu'on lache la souris après avoir bougé l'oiseau, on lance la simu
         elif event.type == pygame.MOUSEBUTTONUP and verif:
             move()
-        
-    if pygame.mouse.get_pressed() != (1, 0, 0) :
+
+    # Fonction pour économiser du CPU quand il ne se passe rien
+    if pygame.mouse.get_pressed() != (1, 0, 0) and inMove == False:
         pygame.time.wait(50)
-    #pygame.event.wait()
 
 ###------------------------------------------------------------------------------------------------------------###
 # Fonction qui vérifie si on a "attrapé" l'oiseau
@@ -82,8 +85,8 @@ def graph_catapulte():
             if (x - 175) ** 2 + (y - 150) ** 2 <= 22500:
                 longueur = int(sqrt((x - 175) ** 2 + (y - 150) ** 2))
                 pygame.draw.line(surface, (48, 23, 8), (200, 180), (x - 10, y - 2), 20 - int(longueur * 13 / 150))
-                coord=(x - 24, y - 22)
-                surface.blit(bird, coord)
+                coord=(x, y)
+                surface.blit(bird, (coord[0] - 24, coord[1] - 22))
                 pygame.draw.line(surface, (48, 23, 8), (160, 177), (x - 10, y), 20 - int(longueur * 13 / 150))
             else:
                 coord = (int(150 * ((x - 177) / (sqrt((x - 177) ** 2 + (y - 150) ** 2))) + 177),
@@ -111,21 +114,20 @@ def sintheta(x0,y0,x1,y1):
 def sign(a):
     return int(a>0) - int(a<0)
 ###------------------------------------------------------------------------------------------------------------###
-# Fonction éponyme...
+# Fonction qui trace instantannement la courbe que va emprunté l'oiseau
 def trajectoire():
     ### INI
-    #On enregistre le point de laché de la souris
+    #On enregistre les coordonnées de l'oiseau au moment du laché de la souris
     global coord
-    x0,y0=coord[0],350-coord[1]
+    x0,y0=coord[0],350-coord[1] #On inverse les coord Y pour faire les calculs
     x1,y1=153, 150 #emplacement de l'origine de l'élastique
     m=2
-    k=10
-    L0=20
+    k=5
+    L0=10
     e=5/9
     g=9.81
     angle=asin(sintheta(x0,y0,x1,y1))
     totalTime=0
-
 
     ## Avant rebond -> equation de trajectoire parabolique
     # On calcule la vitesse initiale avec l'energie potentielle élastique, puis on définie une équation de trajectoire (avec comme seule force le poids)
@@ -151,13 +153,13 @@ def trajectoire():
         P+=[[X(T),Y(T)]]
         T+=0.100
     P+=[[X(Tf),Y(Tf)]]
+
     ## Après rebond
     ## On recalcule des equations de trajectoires après application d'un coefficient de restitution
     ## On répète l'opération jusqu'à ce que le temp de rebond soit inférieur à 0.1s (minimum 2 rebonds)
     ## Le projectile est alors arreté (on pourrais rajouté des frottement au sol)
+
     r=0
-
-
     while Tf >= 0.1 or r <= 2 :
         v0x*=e
         v0y*=sign(angle)*e
@@ -175,51 +177,34 @@ def trajectoire():
             T+=0.100
         P+=[[Xr(Tf),Yr(Tf)]]
         r+=1
-    #On affiche la liste de points et l'élastique
 
-    #print(len(P))
-    
+    # On retransforme dans les coord pygame
     for i in range(len(P)):
         P[i][1]=350-P[i][1]
     
     pygame.draw.lines(surface, (0,0,0), False, P, 3)
     return [P,totalTime]
-    #pygame.display.update()
-###------------------------------------------------------------------------------------------------------------###
+    
 ###------------------------------------------------------------------------------------------------------------###
 # Fonction éponyme...
 def move():
+    global inMove
+    inMove=True
     P,totalTime=trajectoire()
     pas=totalTime/len(P)
     #fps=1/pas
-    #print(fps)
-    '''t=0
-    i=0
-    while t<=totalTime :
-        # On refill la surface en blanc afin d'effacer toutes les images du tic précédent
-        surface.fill((255, 255, 255))
-        # Catapulte d'arrière plan
-        surface.blit(catapulteArriere, (175, 150))
-        # Catapulte à l'avant
-        surface.blit(catapulteAvant, (148, 142))
-        surface.blit(bird, P[i])
-    
-    
-        # Affichage sur l'écran de tout ce qu'on a fait précédemment
-        pygame.display.update()
-        pygame.time.wait(100)
-        t+=pas
-        i+=1'''
-        
+            
     for i in P:
         #clock.tick(fps)
         surface.fill((255, 255, 255))
         surface.blit(catapulteArriere, (175, 150))
         surface.blit(catapulteAvant, (148, 142))
-        surface.blit(bird, (i[0],i[1]-44))
+        surface.blit(bird, (i[0],i[1]-44)) # On décale le y de 44=hauteur de l'oiseau
         pygame.display.update()
+        loop()
         pygame.time.wait(5)
 
+    inMove=False
 
 ###------------------------------------------------------------------------------------------------------------###
 # Boucle draw qui tourne en continu afin de lancer toutes les fonctions à chaque tics
