@@ -183,7 +183,7 @@ def trajectoire():
         P[i][1]=350-P[i][1]
     
     pygame.draw.lines(surface, (0,0,0), False, P, 3)
-    return [P,totalTime]
+    return [P,totalTime/10] #10 px = 1 m
     
 ###------------------------------------------------------------------------------------------------------------###
 # Fonction éponyme...
@@ -194,11 +194,11 @@ def move():
     print("distance parcourue en m: "+str(P[-1][0]))
     print("total points :"+str(len(P)))
     print("total time"+str(totalTime))
-    fps=totalTime/len(P)
+    fps=1/(totalTime/len(P))
     print(fps)
 
     for i in P:
-        clock.tick(60)
+        clock.tick(fps)
         surface.fill((255, 255, 255))
         surface.blit(catapulteArriere, (175, 150))
         surface.blit(catapulteAvant, (148, 142))
