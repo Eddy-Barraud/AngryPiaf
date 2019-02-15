@@ -17,6 +17,8 @@ assets = pygame.image.load('image/assets.png').convert_alpha()
 
 # Sprites Simple
 bird = assets.subsurface(902, 798, 48, 44)
+birdCrush = assets.subsurface(904,888, 49, 42)
+
 catapulteAvant = assets.subsurface(833, 0, 43, 126)
 catapulteArriere = assets.subsurface(0, 0, 38, 200)
 
@@ -191,22 +193,27 @@ def move():
     global inMove
     inMove=True
     P,totalTime=trajectoire()
-    print("distance parcourue en m : "+str(P[-1][0]))
-    print("total points :"+str(len(P)))
-    print("total time : "+str(totalTime))
+    #print("distance parcourue en m : "+str(P[-1][0]))
+    #print("total points :"+str(len(P)))
+    #print("total time : "+str(totalTime))
     fps=1/(totalTime/len(P))
-    print("fps : "+str(fps))
+    #print("fps : "+str(fps))
 
     for i in P:
         clock.tick(fps)
         surface.fill((255, 255, 255))
         surface.blit(catapulteArriere, (175, 150))
         surface.blit(catapulteAvant, (148, 142))
-        surface.blit(bird, (i[0],i[1]-44)) # On décale le y de 44=hauteur de l'oiseau
+        
+        if i[1] <= 349 :
+            surface.blit(bird, (i[0],i[1]-44)) # On décale le y de 44=hauteur de l'oiseau
+        else :
+            surface.blit(birdCrush, (i[0],i[1]-42)) # On décale le y de 42=hauteur de l'oiseau
+
         pygame.display.update()
         loop()
         #pygame.time.wait(5)
-
+    pygame.time.wait(500)
     inMove=False
 
 ###------------------------------------------------------------------------------------------------------------###
