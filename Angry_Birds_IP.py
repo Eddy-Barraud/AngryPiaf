@@ -17,7 +17,7 @@ assets = pygame.image.load('image/assets.png').convert_alpha()
 
 # Sprites Simple
 bird = assets.subsurface(902, 798, 48, 44)
-birdCrush = assets.subsurface(904,888, 49, 42)
+birdCrush = assets.subsurface(904,888, 49, 44)
 birdCloud = assets.subsurface(908,842,46,44)
 catapulteAvant = assets.subsurface(833, 0, 43, 126)
 catapulteArriere = assets.subsurface(0, 0, 38, 200)
@@ -131,7 +131,8 @@ def sign(a):
 
 
 ###------------------------------------------------------------------------------------------------------------###
-# Fonction qui trace instantannement la courbe que va emprunté l'oiseau
+# Fonction qui trace instantannement la courbe que va emprunté l'oiseau 
+# et qui sert aussi a renvoyer la liste des points de la trajectoire pour la fonction move
 def trajectoire():
     ### INI
     # On enregistre les coordonnées de l'oiseau au moment du laché de la souris
@@ -229,18 +230,21 @@ def move():
         if i[1] <= 349 :
             surface.blit(bird, (i[0],i[1]-44)) # On décale le y de 44=hauteur de l'oiseau
         else :
-            surface.blit(birdCrush, (i[0],i[1]-42)) # On décale le y de 42=hauteur de l'oiseau
+            surface.blit(birdCrush, (i[0],i[1]-44)) # On décale le y de 42=hauteur de l'oiseau
 
         pygame.display.update()
         loop()
         #pygame.time.wait(5)
 
+    # Animation : nuage de disparition
+    pygame.time.wait(500)
     surface.fill((255, 255, 255))
     surface.blit(catapulteArriere, (175, 150))
     surface.blit(catapulteAvant, (148, 142))
     surface.blit(birdCloud,(P[-1][0],P[-1][1]-44))
+    surface.blit(bird, (153, 150))
     pygame.display.update()
-    pygame.time.wait(500)
+    pygame.time.wait(150)
     inMove=False
 
 ###------------------------------------------------------------------------------------------------------------###
