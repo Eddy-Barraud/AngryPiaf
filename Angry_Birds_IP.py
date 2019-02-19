@@ -18,7 +18,7 @@ assets = pygame.image.load('image/assets.png').convert_alpha()
 # Sprites Simple
 bird = assets.subsurface(902, 798, 48, 44)
 birdCrush = assets.subsurface(904,888, 49, 42)
-
+birdCloud = assets.subsurface(908,842,46,44)
 catapulteAvant = assets.subsurface(833, 0, 43, 126)
 catapulteArriere = assets.subsurface(0, 0, 38, 200)
 
@@ -213,6 +213,12 @@ def move():
         pygame.display.update()
         loop()
         #pygame.time.wait(5)
+
+    surface.fill((255, 255, 255))
+    surface.blit(catapulteArriere, (175, 150))
+    surface.blit(catapulteAvant, (148, 142))
+    surface.blit(birdCloud,(P[-1][0],P[-1][1]-44))
+    pygame.display.update()
     pygame.time.wait(500)
     inMove=False
 
