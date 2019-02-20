@@ -4,7 +4,7 @@ from math import asin
 
 # Initialisation global pygame
 pygame.init()
-surface = pygame.display.set_mode((1400, 500), pygame.RESIZABLE)
+surface = pygame.display.set_mode((1400, 409), pygame.RESIZABLE)
 pygame.display.set_caption("Angry Piaf ;)")
 clock = pygame.time.Clock()
 
@@ -14,7 +14,8 @@ inMove = False
 coord = ()
 # Sprites Sheets
 assets = pygame.image.load('image/assets.png').convert_alpha()
-
+background = pygame.image.load('image/background.png')
+background = pygame.transform.scale(background, (1400, 409))
 # Sprites Simple
 bird = assets.subsurface(902, 798, 48, 44)
 birdCrush = assets.subsurface(904,888, 49, 44)
@@ -23,11 +24,13 @@ catapulteAvant = assets.subsurface(833, 0, 43, 126)
 catapulteArriere = assets.subsurface(0, 0, 38, 200)
 
 
+
 ###------------------------------------------------------------------------------------------------------------###
 # Pygame loop qui va chercher un évènement (souris, clavier, etc) tous les tics et démarrer le lancé
 def loop():
     global verif
     global inMove
+    global background
     # Fausse boucle for afin de récupérer les évènements
     for event in pygame.event.get():
         # Cas du déclenchement de la croix de la fenêtre
@@ -44,6 +47,9 @@ def loop():
         # Si l'utilisateur redimensionne la fenêtre
         elif event.type == pygame.VIDEORESIZE:
             surface = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+            # On remet à l'échelle l'image de fond
+            background = pygame.image.load('image/background.png')
+            background = pygame.transform.scale(background, (event.w, event.h))
         # Des qu'on lache la souris après avoir bougé l'oiseau, on lance la simu
         elif event.type == pygame.MOUSEBUTTONUP and verif and inMove == False:
             move()
@@ -51,7 +57,7 @@ def loop():
     # Fonction pour économiser du CPU quand il ne se passe rien
     if pygame.mouse.get_pressed() != (1, 0, 0) and inMove == False:
         # pygame.time.wait(50)
-        clock.tick(30)
+        clock.tick(10)
 
 
 ###------------------------------------------------------------------------------------------------------------###
@@ -74,6 +80,7 @@ def graph_catapulte():
     global coord
     # On refill la surface en blanc afin d'effacer toutes les images du tic précédent
     surface.fill((255, 255, 255))
+    surface.blit(background,(0,0))
     # Catapulte d'arrière plan
     surface.blit(catapulteArriere, (175, 150))
 
@@ -164,7 +171,7 @@ def trajectoire():
     P = []
     while T <= Tf:
         P += [[X(T), Y(T)]]
-        T += 0.167
+        T += 0.1
     P += [[X(Tf), Y(Tf)]]
 
     ## Après rebond
@@ -190,7 +197,7 @@ def trajectoire():
         T = 0
         while T <= Tf:
             P += [[Xr(T), Yr(T)]]
-            T += 0.167
+            T += 0.1
         P += [[Xr(Tf), Yr(Tf)]]
         r += 1
 
@@ -209,30 +216,29 @@ def move():
 
     inMove=True
     P,totalTime=trajectoire()
-    #print("distance parcourue en m : "+str(P[-1][0]))
-    #print("total points :"+str(len(P)))
-    #print("total time : "+str(totalTime))
-    fps=1/(totalTime/len(P))
-    #print("fps : "+str(fps))
+    print("distance parcourue en m : "+str(P[-1][0]))
+    print("total points :"+str(len(P)))
+    print("total time : "+str(totalTime))
 
     for i in P:
-        clock.tick(60)
+        clock.tick(120)
         surface.fill((255, 255, 255))
+        surface.blit(background,(0,0))
         surface.blit(catapulteArriere, (175, 150))
         surface.blit(catapulteAvant, (148, 142))
         
-        if i[1] <= 349 :
-            surface.blit(bird, (i[0],i[1]-44)) # On décale le y de 44=hauteur de l'oiseau
+        if i == P[-1] : # On affiche l'oiseau mort au dernier point
+            surface.blit(birdCrush, (i[0],i[1]-44)) # On décale le y de 44=hauteur de l'oiseau
         else :
-            surface.blit(birdCrush, (i[0],i[1]-44)) # On décale le y de 42=hauteur de l'oiseau
+            surface.blit(bird, (i[0],i[1]-44)) # On décale le y de 42=hauteur de l'oiseau
 
         pygame.display.update()
         loop()
-        #pygame.time.wait(5)
-
+    
     # Animation : nuage de disparition
     pygame.time.wait(500)
     surface.fill((255, 255, 255))
+    surface.blit(background,(0,0))
     surface.blit(catapulteArriere, (175, 150))
     surface.blit(catapulteAvant, (148, 142))
     surface.blit(birdCloud,(P[-1][0],P[-1][1]-44))
