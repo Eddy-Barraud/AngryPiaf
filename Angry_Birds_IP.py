@@ -39,7 +39,7 @@ def loop():
             sys.exit()
         # Si l'utilisateur appuie sur escape
         elif event.type == pygame.KEYDOWN:
-            if event.type == pygame.K_j:
+            if event.key == pygame.K_SPACE:
                 inMove = False
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
@@ -234,18 +234,20 @@ def move():
 
         pygame.display.update()
         loop()
-    
-    # Animation : nuage de disparition
-    pygame.time.wait(500)
-    surface.fill((255, 255, 255))
-    surface.blit(background,(0,0))
-    surface.blit(catapulteArriere, (175, 150))
-    surface.blit(catapulteAvant, (148, 142))
-    surface.blit(birdCloud,(P[-1][0],P[-1][1]-44))
-    surface.blit(bird, (153, 150))
-    pygame.display.update()
-    pygame.time.wait(150)
-    inMove=False
+        if inMove == False:
+            break
+    if inMove == True :
+        # Animation : nuage de disparition
+        pygame.time.wait(500)
+        surface.fill((255, 255, 255))
+        surface.blit(background,(0,0))
+        surface.blit(catapulteArriere, (175, 150))
+        surface.blit(catapulteAvant, (148, 142))
+        surface.blit(birdCloud,(P[-1][0],P[-1][1]-44))
+        surface.blit(bird, (153, 150))
+        pygame.display.update()
+        pygame.time.wait(150)
+        inMove=False
 
 ###------------------------------------------------------------------------------------------------------------###
 # Boucle draw qui tourne en continu afin de lancer toutes les fonctions à chaque tics
