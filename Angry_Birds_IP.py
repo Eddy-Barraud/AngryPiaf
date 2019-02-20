@@ -171,7 +171,7 @@ def trajectoire():
     P = []
     while T <= Tf:
         P += [[X(T), Y(T)]]
-        T += 0.1
+        T += 0.166
     P += [[X(Tf), Y(Tf)]]
 
     ## Après rebond
@@ -197,7 +197,7 @@ def trajectoire():
         T = 0
         while T <= Tf:
             P += [[Xr(T), Yr(T)]]
-            T += 0.1
+            T += 0.166
         P += [[Xr(Tf), Yr(Tf)]]
         r += 1
 
