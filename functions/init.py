@@ -1,4 +1,5 @@
 import pygame, sys
+
 global verif,inMove,coord,assets,background,bird,birdCrush,birdCloud,catapulteAvant,catapulteArriere,surface,clock,coord
 # Initialisation global pygame
 pygame.init()

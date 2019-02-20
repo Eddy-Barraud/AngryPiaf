@@ -3,6 +3,7 @@ from math import sqrt
 from math import asin
 import functions.init as init
 import functions.trajectoire as trajectoire
+
 def run(x,y):
     # On refill la init.surface en blanc afin d'effacer toutes les images du tic précédent
     init.surface.fill((255, 255, 255))

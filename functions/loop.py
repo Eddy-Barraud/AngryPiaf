@@ -1,6 +1,7 @@
 import pygame,sys
 import functions.init as init
 import functions.move as move
+
 def run():
     # Fausse boucle for afin de récupérer les évènements
     for event in pygame.event.get():
