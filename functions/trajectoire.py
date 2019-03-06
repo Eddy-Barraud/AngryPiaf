@@ -9,8 +9,6 @@ def costheta(x0, y0, x1, y1):
     return (x1 - x0) / springLenght(x0, y0, x1, y1)
 def sintheta(x0, y0, x1, y1):
     return (y1 - y0) / springLenght(x0, y0, x1, y1)
-def sign(a):
-    return int(a > 0) - int(a < 0)
 
 def run():
     ### INI
@@ -22,6 +20,7 @@ def run():
     L0 = 10
     e = 5 / 9
     g = 9.81
+    intervalle=0.120
     angle = asin(sintheta(x0, y0, x1, y1))
     totalTime = 0
 
@@ -41,6 +40,7 @@ def run():
     def X(t):
         return v0x * t + x0
 
+
     # Tf=solve(Y==0,t)[0].right().n()
     Tf = (v0y + sqrt(v0y ** 2 + 2 * g * y0)) / g
     totalTime += Tf
@@ -48,7 +48,7 @@ def run():
     P = []
     while T <= Tf:
         P += [[X(T), Y(T)]]
-        T += 0.166
+        T += intervalle
     P += [[X(Tf), Y(Tf)]]
 
     ## Après rebond
@@ -58,8 +58,8 @@ def run():
 
     r = 0
     while Tf >= 0.1 or r <= 2:
-        v0x *= e
-        v0y *= sign(angle) * e
+        v0x *= e # coefficient de restitution
+        v0y = -1 * (v0y - g * Tf) * e
         lastY = P[-1][1]
         lastX = P[-1][0]
 
@@ -74,7 +74,7 @@ def run():
         T = 0
         while T <= Tf:
             P += [[Xr(T), Yr(T)]]
-            T += 0.166
+            T += intervalle
         P += [[Xr(Tf), Yr(Tf)]]
         r += 1
 
