@@ -45,7 +45,8 @@ import functions.loop as loop
 
 while True:
     # Lancement de toutes les fonctions dans l'ordre
-    x,y=init.getPos() # Permet d'avoir les coordonnées de la souris à chacune de ces boucles, variables locales car appelées bcp de fois..
+    x,y=init.pygame.mouse.get_pos() # Permet d'avoir les coordonnées de la souris à chacune de ces boucles, variables locales car appelées bcp de fois..
     bird_grab.run(x,y)
     graph_catapulte.run(x,y)
     loop.run()
+    
