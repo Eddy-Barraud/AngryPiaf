@@ -17,13 +17,12 @@ def run():
                 pygame.quit()
                 sys.exit()
         # Si l'utilisateur redimensionne la fenêtre
-        elif event.type == pygame.VIDEORESIZE:
+        '''elif event.type == pygame.VIDEORESIZE:
             init.surface = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
             # On remet à l'échelle l'image de fond
-            init.background = pygame.image.load('image/background.png')
-            init.background = pygame.transform.scale(init.background, (event.w, event.h))
+            init.background = pygame.transform.scale(init.background, (event.w, event.h))'''
         # Des qu'on lache la souris après avoir bougé l'oiseau, on lance la simu
-        elif event.type == pygame.MOUSEBUTTONUP and init.verif and init.inMove == False:
+        if event.type == pygame.MOUSEBUTTONUP and init.verif and init.inMove == False:
             move.run()
 
     # Fonction pour économiser du CPU quand il ne se passe rien

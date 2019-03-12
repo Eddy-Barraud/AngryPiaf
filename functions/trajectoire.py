@@ -8,13 +8,17 @@ def springLenght(x0, y0, x1, y1):
 def costheta(x0, y0, x1, y1):
     return (x1 - x0) / springLenght(x0, y0, x1, y1)
 def sintheta(x0, y0, x1, y1):
-    return (y1 - y0) / springLenght(x0, y0, x1, y1)
+    if springLenght(x0, y0, x1, y1) != 0:
+        return (y1 - y0) / springLenght(x0, y0, x1, y1)
+    else:
+
+        return (y1 - y0) / 0.0001
 
 def run():
     ### INI
     # On enregistre les coordonnées de l'oiseau au moment du laché de la souris
     x0, y0 = init.coord[0], 350 - init.coord[1]  # On inverse les coord Y pour faire les calculs
-    x1, y1 = 153, 150  # emplacement de l'origine de l'élastique
+    x1, y1 = 177, 177  # emplacement de l'origine de l'élastique
     m = 2
     k = 5
     L0 = 10

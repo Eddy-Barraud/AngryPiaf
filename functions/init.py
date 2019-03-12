@@ -3,7 +3,8 @@ import pygame, sys
 global verif,inMove,coord,assets,background,bird,birdCrush,birdCloud,catapulteAvant,catapulteArriere,surface,clock,coord
 # Initialisation global pygame
 pygame.init()
-surface = pygame.display.set_mode((1400, 409), pygame.RESIZABLE)
+#surface = pygame.display.set_mode((1400, 409), pygame.RESIZABLE)
+surface = pygame.display.set_mode((1400, 409))
 pygame.display.set_caption("Angry Piaf ;)")
 clock = pygame.time.Clock()
 
