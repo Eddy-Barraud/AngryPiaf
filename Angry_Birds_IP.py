@@ -19,8 +19,8 @@ import functions.bird_grab as bird_grab
 import functions.graph_catapulte as graph_catapulte
 
 """ Fonction loop
-        Gere touts les événements du jeux :
-            - si on appui sur escape ou si on click sur fermé, le jeu se termine
+        Gere touts les événements du jeu :
+            - si on click sur fermé, le jeu se termine
             - si on lache la souris après avoir tiré sur l'élastique on enclenche la fonction move, pour lancer l'oiseau
             - si on appui sur espace pendant un lancé, le lancé est annulé et l'oiseau reviens à son origine
 """

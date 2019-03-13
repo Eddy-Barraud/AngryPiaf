@@ -33,7 +33,7 @@ def run():
     # On applique l'équation de trajectoire toutes les n ms pour établir une liste de points empruntés par le projectile
     # On s'arrete quand on touche le sol, soit y=0 ou t=tfinal
 
-    C = sqrt(k / m) * (springLenght(x0, y0, x1, y1) - L0);
+    C = sqrt(k / m) * (springLenght(x0, y0, x1, y1) - L0)
 
     v0x = C * costheta(x0, y0, x1, y1)
     v0y = C * sintheta(x0, y0, x1, y1)

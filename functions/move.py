@@ -17,7 +17,7 @@ def run():
         init.surface.blit(init.background,(0,0))
         init.surface.blit(init.catapulteArriere, (175, 150))
 
-        if i[0] - 153 <= 0 or i[1] - 150 <= 0:
+        if i[0] - 153 >= 0 or i[1] - 150 <= 0:
             elastique = False
 
         if i == P[-1]: # On affiche l'oiseau mort au dernier point

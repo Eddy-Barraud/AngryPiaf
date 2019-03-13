@@ -16,6 +16,7 @@ coord = ()
 assets = pygame.image.load('image/assets.png').convert_alpha()
 background = pygame.image.load('image/background.png')
 # Sprites Simple
+pig = assets.subsurface(726, 854, 53, 48)
 bird = assets.subsurface(902, 798, 48, 44)
 birdCrush = assets.subsurface(904,888, 49, 44)
 birdCloud = assets.subsurface(908,842,46,44)
