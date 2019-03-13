@@ -42,11 +42,24 @@ import functions.loop as loop
 
 ###------------------------------------------------------------------------------------------------------------###
 # Boucle draw qui tourne en continu afin de lancer toutes les fonctions à chaque tics
-
 while True:
-    # Lancement de toutes les fonctions dans l'ordre
-    x,y=init.pygame.mouse.get_pos() # Permet d'avoir les coordonnées de la souris à chacune de ces boucles, variables locales car appelées bcp de fois..
-    bird_grab.run(x,y)
-    graph_catapulte.run(x,y)
-    loop.run()
+    init.clock.tick(120)
+    init.surface.fill((255, 255, 255))
+    init.backend.update()
+    init.backend.draw(init.surface)
+
+    # Lancement de toutes les fonctions dans l'ordre    
+    if init.inMove == False :
+        x,y=init.pygame.mouse.get_pos() # Permet d'avoir les coordonnées de la souris à chacune de ces boucles, variables locales car appelées bcp de fois..
+        bird_grab.run(x,y)
+        graph_catapulte.run(x,y)
     
+    loop.run()
+
+    init.middle.update()
+    init.middle.draw(init.surface)
+
+    init.front.update()
+    init.front.draw(init.surface)
+
+    init.pygame.display.update()
