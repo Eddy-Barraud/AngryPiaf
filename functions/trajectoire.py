@@ -77,7 +77,7 @@ def run():
 
         Tf = (v0y + sqrt(v0y ** 2)) / g     # On estime que l'on part de l'ordonnée 0 (pas +v0y...)
         totalTime += Tf
-
+        T=0
         while T <= Tf:
             P += [[Xr(T), Yr(T)]]
             T += intervalle
