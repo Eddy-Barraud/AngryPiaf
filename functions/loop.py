@@ -14,6 +14,7 @@ def run():
             if event.key == pygame.K_SPACE:
                 init.inMove = False
                 init.bird.pointnb = -1
+                init.middle.add(init.pig)
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()

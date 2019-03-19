@@ -80,6 +80,7 @@ class pigObj(pygame.sprite.Sprite):
         self.rect.center  = position
         self.radius       = radius
         self.imageCloud   = cloud
+        self.imageNormal  = image
         self.die          = False
         self.countdown    = 0
     
@@ -91,6 +92,10 @@ class pigObj(pygame.sprite.Sprite):
             self.countdown += 1
         elif self.die == True and self.countdown >= 7:
             self.kill()
+            # On reset les variables
+            self.die        = False
+            self.image      = self.imageNormal
+            self.countdown  = 0
 
     def disparait(self):
         self.image    = self.imageCloud
