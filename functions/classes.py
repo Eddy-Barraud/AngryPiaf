@@ -10,6 +10,7 @@ class decor(pygame.sprite.Sprite):
         
 
 class birdObj(pygame.sprite.Sprite):
+    """ Définition d'un objet de type oiseau """
     def __init__(self, name, image, position,radius,cloud,crush,state="normal"):
         pygame.sprite.Sprite.__init__(self)
         self.name         = name
@@ -71,6 +72,7 @@ class birdObj(pygame.sprite.Sprite):
 
 
 class pigObj(pygame.sprite.Sprite):
+    """ Définition d'un objet de type cochon """
     def __init__(self, name, image, position,radius,cloud):
         pygame.sprite.Sprite.__init__(self)
         self.name         = name
@@ -98,6 +100,7 @@ class pigObj(pygame.sprite.Sprite):
 
 
 class lineObj(pygame.sprite.Sprite):
+    """ Définition d'un objet de type ligne """
     def __init__(self, color, start_pos, end_pos, width=1):
         pygame.sprite.Sprite.__init__(self)
         self.color        = color

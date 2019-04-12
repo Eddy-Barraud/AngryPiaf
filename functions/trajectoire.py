@@ -1,7 +1,6 @@
 import pygame
 import functions.init as init
 from math import sqrt
-from math import asin
 
 def springLenght(x0, y0, x1, y1):
     return sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2)
@@ -17,16 +16,19 @@ def sintheta(x0, y0, x1, y1):
 def run():
     ### INI
     # On enregistre les coordonnées de l'oiseau au moment du laché de la souris
-    x0, y0 = init.coord[0], 350 - init.coord[1]  # On inverse les coord Y pour faire les calculs
-    x1, y1 = 177, 177  # emplacement de l'origine de l'élastique
-    m = 2
-    k = 5
-    L0 = 10
-    e = 5 / 9
-    g = 9.81
-    intervalle=0.120
-    angle = asin(sintheta(x0, y0, x1, y1))
-    totalTime = 0
+
+    x0, y0 = init.coord[0], 350 - init.coord[1]     # On inverse les coord Y pour faire les calculs
+    x1, y1 = 177, 177                               # emplacement de l'origine de l'élastique
+    x0,y0,x1,y1 = x0/100, y0/100, x1/100, y1/100    # on applique l'échelle 1m=100px
+
+    m           = 2        # masse en kg de l'oiseau
+    k           = 100      # constante de raideur de l'élastique en N/m
+    L0          = 0.1      # longueur à vide de l'élastique en m
+    e           = 5 / 9    # coefficient de restitution
+    g           = 9.81     # intensité de pensanteur
+    intervalle  = 1/60     # pour correspondre aux 60 fps
+
+    totalTime   = 0        # on initialise le tmp à 0s
 
     ## Avant rebond -> equation de trajectoire parabolique
     # On calcule la vitesse initiale avec l'energie potentielle élastique, puis on définie une équation de trajectoire (avec comme seule force le poids)
@@ -76,16 +78,19 @@ def run():
         Tf = (v0y + sqrt(v0y ** 2)) / g  # On estime que l'on part de l'ordonnée 0 (pas +v0y...)
         totalTime += Tf
         T = 0
-        while T <= Tf:
+        while T <= Tf: 
             P += [[Xr(T), Yr(T)]]
             T += intervalle
         P += [[Xr(Tf), Yr(Tf)]]
         r += 1
 
     # On retransforme dans les coord pygame
+    #      
     for i in range(len(P)):
+        P[i][0]*=100
+        P[i][1]*=100
         P[i][1] = 350 - P[i][1]
 
     pygame.draw.lines(init.surface, (0, 0, 0), False, P, 3)
-    return [P, totalTime / 10]  # 10 px = 1 m
+    return [P, totalTime]  # 100 px = 1 m
 

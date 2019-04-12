@@ -43,7 +43,7 @@ import functions.loop as loop
 ###------------------------------------------------------------------------------------------------------------###
 # Boucle draw qui tourne en continu afin de lancer toutes les fonctions à chaque tics
 while True:
-    init.clock.tick(120)
+    init.clock.tick(60)
     init.surface.fill((255, 255, 255))
     init.backend.update()
     init.backend.draw(init.surface)
