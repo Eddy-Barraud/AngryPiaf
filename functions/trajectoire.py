@@ -35,39 +35,40 @@ def run():
     # On applique l'équation de trajectoire toutes les n ms pour établir une liste de points empruntés par le projectile
     # On s'arrete quand on touche le sol, soit y=0 ou t=tfinal
 
-    C = sqrt(k / m) * (springLenght(x0, y0, x1, y1) - L0)
+    C           = sqrt(k / m) * (springLenght(x0, y0, x1, y1) - L0)
 
-    v0x = C * costheta(x0, y0, x1, y1)
-    v0y = C * sintheta(x0, y0, x1, y1)
+    v0x         = C * costheta(x0, y0, x1, y1)
+    v0y         = C * sintheta(x0, y0, x1, y1)
 
-    def Y(t):
-        return -g * 0.5 * t ** 2 + v0y * t + y0
+    def Y(t): 
+        return -g * 0.5 * t ** 2 + v0y * t + y0     # equation de trajectoire selon Y
 
     def X(t):
-        return v0x * t + x0
+        return v0x * t + x0                         # equation de trajectoire selon X
 
-
-    # Tf=solve(Y==0,t)[0].right().n()
     Tf = (v0y + sqrt(v0y ** 2 + 2 * g * y0)) / g
     totalTime += Tf
-    T = 0
     P = []
+    T = 0                                           # Temp total en mouvement
+
     while T <= Tf:
         P += [[X(T), Y(T)]]
         T += intervalle
-    P += [[X(Tf), Y(Tf)]]
+    
+    P += [[X(Tf), Y(Tf)]] # on ajoute le dernier point
 
     ## Après rebond
     ## On recalcule des equations de trajectoires après application d'un coefficient de restitution
     ## On répète l'opération jusqu'à ce que le temp de rebond soit inférieur à 0.1s (minimum 2 rebonds)
     ## Le projectile est alors arreté (on pourrais rajouté des frottement au sol)
 
-    r = 0
+    r = 0 # nombre de rebonds
+
     while Tf >= 0.1 or r <= 2:
-        v0x *= e # coefficient de restitution
-        v0y = -1 * (v0y - g * Tf) * e
-        lastY = P[-1][1]
-        lastX = P[-1][0]
+        v0x     *= e                        # coefficient de restitution
+        v0y     = -1 * (v0y - g * Tf) * e   # on recalcule v0y après chute libre et on applique le coef
+        lastY   = P[-1][1]                  # les derniers points sont utilisés comme condition initiale
+        lastX   = P[-1][0]
 
         def Yr(t):
             return -g * 0.5 * t ** 2 + v0y * t + lastY
@@ -75,7 +76,7 @@ def run():
         def Xr(t):
             return v0x * t + lastX
 
-        Tf = (v0y + sqrt(v0y ** 2)) / g  # On estime que l'on part de l'ordonnée 0 (pas +v0y...)
+        Tf = (v0y + sqrt(v0y ** 2)) / g     # On estime que l'on part de l'ordonnée 0 (pas +v0y...)
         totalTime += Tf
         T = 0
         while T <= Tf: 
