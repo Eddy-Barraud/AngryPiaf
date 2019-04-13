@@ -12,7 +12,7 @@ class infoWindow(Thread):
         root = tkinter.Tk()
         root.title("Values")
         root.minsize(width=200, height=409)
-        root.geometry('+2+155')
+        root.geometry('+30+155')
         win = tkinter.Frame(root)
         win.pack()
         verif=tkinter.Label(win, text='')

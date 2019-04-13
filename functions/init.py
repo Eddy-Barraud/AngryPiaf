@@ -1,7 +1,7 @@
 import pygame, sys
 from functions.classes import *
 import os
-os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (215,190) #position initiale de la fenêtre
+os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (245,190) #position initiale de la fenêtre
 
 global verif,inMove,coord,assets,background,bird,birdCrush,birdCloud,catapulteAvant,catapulteArriere,surface,clock,coord,backend,running,values,valuesTraj
 # Initialisation global pygame
