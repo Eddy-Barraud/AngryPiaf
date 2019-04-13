@@ -16,7 +16,7 @@ def run():
                 init.inMove = False
                 init.bird.pointnb = -1
                 init.middle.add(init.pig)
-                init.middle.add(init.woodObj)
+                init.addWood()
             if event.key == pygame.K_ESCAPE:
                 init.running = False
                 pygame.quit()

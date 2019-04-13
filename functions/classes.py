@@ -9,7 +9,6 @@ class decor(pygame.sprite.Sprite):
         self.image        = image
         self.rect         = self.image.get_rect()
         self.rect.x,self.rect.y  = position
-        
 
 class birdObj(pygame.sprite.Sprite):
     """ Définition d'un objet de type oiseau """
@@ -125,6 +124,8 @@ class woodObj(pygame.sprite.Sprite):
             self.imageNormal  = image
         elif orientation == "vertical" :
             self.image        = pygame.transform.rotate(image,90)
+            self.rect         = self.image.get_rect()
+            self.rect.center  = position
             self.imageCloud   = pygame.transform.rotate(cloud,90)
             self.imageNormal  = pygame.transform.rotate(image,90)
 
