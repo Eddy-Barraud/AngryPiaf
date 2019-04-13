@@ -1,5 +1,6 @@
 import pygame
 import functions.init as init
+from math import sqrt
 
 class decor(pygame.sprite.Sprite):
     def __init__(self, name, image, position):
@@ -26,6 +27,10 @@ class birdObj(pygame.sprite.Sprite):
         self.imageCrush   = crush
         self.pointnb      = -1
         self.points       = []
+
+        self.vitesse      = 0
+        self.vx           = 0
+        self.vy           = 0
 
     def update(self):
         if self.state    == "normal":
@@ -68,9 +73,12 @@ class birdObj(pygame.sprite.Sprite):
         if i == self.points[-2]: # On passe a l'état crush à l'avant dernier point            
             self.state = "crush"
 
+        self.vx = (self.points[self.pointnb][0]-self.points[self.pointnb-1][0]) / (1/60) # vx = dx/dt
+        self.vy = (self.points[self.pointnb][1]-self.points[self.pointnb-1][1]) / (1/60)
+        self.vitesse  = sqrt(self.vx**2+self.vy**2)
+
         self.rect.center    = i
         self.pointnb        += 1
-
 
 class pigObj(pygame.sprite.Sprite):
     """ Définition d'un objet de type cochon """
@@ -103,7 +111,39 @@ class pigObj(pygame.sprite.Sprite):
         self.image    = self.imageCloud
         self.die   = True
 
+class woodObj(pygame.sprite.Sprite):
+    """ Définition d'un objet de type bois """
+    def __init__(self, image, position,orientation,cloud):
+        pygame.sprite.Sprite.__init__(self)
+        self.image        = image
+        self.rect         = self.image.get_rect()
+        self.rect.center  = position
+        self.die          = False
+        self.countdown    = 0
+        if orientation == "horizontal" :
+            self.imageCloud   = cloud
+            self.imageNormal  = image
+        elif orientation == "vertical" :
+            self.image        = pygame.transform.rotate(image,90)
+            self.imageCloud   = pygame.transform.rotate(cloud,90)
+            self.imageNormal  = pygame.transform.rotate(image,90)
 
+    def update(self):
+        for i in init.middle:
+            if i != self and type(i) == birdObj and pygame.sprite.collide_rect(self, i):
+                self.disparait()
+        if self.die == True and self.countdown < 7:
+            self.countdown += 1
+        elif self.die == True and self.countdown >= 7:
+            self.kill()
+            # On reset les variables
+            self.die        = False
+            self.image      = self.imageNormal
+            self.countdown  = 0
+
+    def disparait(self):
+        self.image    = self.imageCloud
+        self.die   = True
 
 class lineObj(pygame.sprite.Sprite):
     """ Définition d'un objet de type ligne """
@@ -115,14 +155,14 @@ class lineObj(pygame.sprite.Sprite):
         self.end_posLast      = end_pos
         self.width        = width
         self.widthLast    = width
-        self.image        = pygame.Surface([init.WIDTH,init.HEIGHT], pygame.SRCALPHA, 32)
+        self.image        = pygame.Surface([init.WIDTH,init.HEIGHT], pygame.SRCALPHA)
         self.image        = self.image.convert_alpha()
         pygame.draw.line(self.image, self.color, self.start_pos, self.end_pos, self.width)
         self.rect         = self.image.get_rect()
 
     def update(self):
         if self.end_pos != self.end_posLast or self.width != self.widthLast: #update only if modification made
-            self.image            = pygame.Surface([init.WIDTH,init.HEIGHT], pygame.SRCALPHA, 32)
+            self.image            = pygame.Surface([init.WIDTH,init.HEIGHT], pygame.SRCALPHA)
             self.image            = self.image.convert_alpha()
             pygame.draw.line(self.image, self.color, self.start_pos, self.end_pos, self.width)
             self.rect             = self.image.get_rect()

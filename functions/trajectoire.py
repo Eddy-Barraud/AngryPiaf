@@ -1,6 +1,8 @@
 import pygame
 import functions.init as init
 from math import sqrt
+from math import asin
+from math import pi
 
 def springLenght(x0, y0, x1, y1):
     return sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2)
@@ -10,7 +12,6 @@ def sintheta(x0, y0, x1, y1):
     if springLenght(x0, y0, x1, y1) != 0:
         return (y1 - y0) / springLenght(x0, y0, x1, y1)
     else:
-
         return (y1 - y0) / 0.0001
 
 def run():
@@ -22,13 +23,13 @@ def run():
     x0,y0,x1,y1 = x0/100, y0/100, x1/100, y1/100    # on applique l'échelle 1m=100px
 
     m           = 2        # masse en kg de l'oiseau
-    k           = 100      # constante de raideur de l'élastique en N/m
+    k           = 200      # constante de raideur de l'élastique en N/m
     L0          = 0.1      # longueur à vide de l'élastique en m
     e           = 5 / 9    # coefficient de restitution
     g           = 9.81     # intensité de pensanteur
     intervalle  = 1/60     # pour correspondre aux 60 fps
-
     totalTime   = 0        # on initialise le tmp à 0s
+    angle       = asin(sintheta(x0, y0, x1, y1))
 
     ## Avant rebond -> equation de trajectoire parabolique
     # On calcule la vitesse initiale avec l'energie potentielle élastique, puis on définie une équation de trajectoire (avec comme seule force le poids)
@@ -93,5 +94,9 @@ def run():
         P[i][1] = 350 - P[i][1]
 
     pygame.draw.lines(init.surface, (0, 0, 0), False, P, 3)
-    return [P, totalTime]  # 100 px = 1 m
+    init.valuesTraj=f'distance (m): {round(P[-1][0]/100,2)} \n'
+    init.valuesTraj+=f'total points: {len(P)} \n'
+    init.valuesTraj+=f'total time: {round(totalTime,2)} \n'
+    init.valuesTraj+=f'angle: {round(angle*180/(pi),2)} \n'
+    return P  # 100 px = 1 m
 

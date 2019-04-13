@@ -49,7 +49,7 @@ while True:
     init.backend.draw(init.surface)
 
     # Lancement de toutes les fonctions dans l'ordre    
-    if init.inMove == False :
+    if init.inMove == False:
         x,y=init.pygame.mouse.get_pos() # Permet d'avoir les coordonnées de la souris à chacune de ces boucles, variables locales car appelées bcp de fois..
         bird_grab.run(x,y)
         graph_catapulte.run(x,y)
