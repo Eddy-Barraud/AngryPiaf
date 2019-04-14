@@ -1,5 +1,6 @@
 import pygame
 import functions.init as init
+import functions.rebond as rebond
 from math import sqrt
 
 class decor(pygame.sprite.Sprite):
@@ -40,6 +41,16 @@ class birdObj(pygame.sprite.Sprite):
             self.image    = self.imageCrush
         if self.pointnb >= 0:
             self.move()
+        
+        if init.groundLine.rect.collidepoint(self.rect.bottomright) and self.vy < 0 and self.pointnb > 3 :
+            rebond.run(self,"horizontal")
+        for wood in init.middle:
+            if type(wood) == woodObj and wood.rect.collidepoint(self.rect.bottomright) and self.vy < 0 and self.pointnb > 3:
+                print(f'{self.rect.bottom}<>{wood.rect.top}')
+                if self.rect.top <= wood.rect.top : # alors rebond sur le dessus
+                    rebond.run(self,"horizontal")
+                else :                                                 # alors rebond sur le côté
+                    rebond.run(self,"vertical")
 
     def move(self):
         if self.pointnb == len(self.points): 
@@ -72,11 +83,13 @@ class birdObj(pygame.sprite.Sprite):
         if i == self.points[-2]: # On passe a l'état crush à l'avant dernier point            
             self.state = "crush"
 
-        self.vx = (self.points[self.pointnb][0]-self.points[self.pointnb-1][0]) / (1/60) # vx = dx/dt
-        self.vy = (self.points[self.pointnb][1]-self.points[self.pointnb-1][1]) / (1/60)
-        self.vitesse  = sqrt(self.vx**2+self.vy**2)
+        self.vx         = (self.points[self.pointnb][0]-self.points[self.pointnb-1][0]) / (1/60) # vx = dx/dt
+        self.vx        *= 1/100 # 100px = 1m
+        self.vy         = (self.points[self.pointnb][1]-self.points[self.pointnb-1][1]) / (1/60)
+        self.vy        *= -1/100 # 100px = 1m et y vers le haut
+        self.vitesse    = sqrt(self.vx**2+self.vy**2)
 
-        self.rect.center    = i
+        self.rect.midbottom    = i
         self.pointnb        += 1
 
 class pigObj(pygame.sprite.Sprite):
@@ -119,6 +132,7 @@ class woodObj(pygame.sprite.Sprite):
         self.rect.center  = position
         self.die          = False
         self.countdown    = 0
+        self.orientation  = orientation
         if orientation == "horizontal" :
             self.imageCloud   = cloud
             self.imageNormal  = image
@@ -159,7 +173,7 @@ class lineObj(pygame.sprite.Sprite):
         self.image        = pygame.Surface([init.WIDTH,init.HEIGHT], pygame.SRCALPHA)
         self.image        = self.image.convert_alpha()
         pygame.draw.line(self.image, self.color, self.start_pos, self.end_pos, self.width)
-        self.rect         = self.image.get_rect()
+        self.rect         = pygame.Rect(start_pos[0], start_pos[1],end_pos[0]-start_pos[0] , width)
 
     def update(self):
         if self.end_pos != self.end_posLast or self.width != self.widthLast: #update only if modification made

@@ -3,7 +3,18 @@ from functions.classes import *
 import os
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (245,190) #position initiale de la fenêtre
 
-global verif,inMove,coord,assets,background,bird,birdCrush,birdCloud,catapulteAvant,catapulteArriere,surface,clock,coord,backend,running,values,valuesTraj
+global verif,inMove,coord,assets,background,bird,birdCrush,birdCloud,catapulteAvant,catapulteArriere,surface,clock,coord,backend,running,values,valuesTraj,intervalle,fps
+
+# Variables globales
+running     = True
+verif       = False
+inMove      = False
+coord       = [0,0]
+valuesTraj  = ""
+fps         = 60
+intervalle  = 1/fps
+e           = 5/9
+
 # Initialisation global pygame
 pygame.init()
 WIDTH=1400
@@ -16,12 +27,7 @@ front       = pygame.sprite.Group() # groupe de sprites décor du fond
 pygame.display.set_caption("Angry Piaf ;)")
 clock = pygame.time.Clock()
 
-# Variables globales
-running = True
-verif   = False
-inMove  = False
-coord   = [0,0]
-valuesTraj=""
+
 # Sprites Sheets
 assets  = pygame.image.load('image/assets.png').convert_alpha()
 assetsWood  = pygame.image.load('image/ingame_blocks_wood.png').convert_alpha()
@@ -55,7 +61,7 @@ bird                        = birdObj("bird",imageBird,(177, 172),25,imageBirdCl
 pig                         = pigObj("pig",imagePig,(1000, 326),24,imageBirdCloud)
 line1                       = lineObj((48, 23, 8), (200, 180), (160, 177), 20)
 line2                       = lineObj((48, 23, 8), (160, 177), (160, 177), 0)
-groundLine                  = lineObj((0,0,0,), (0, 390), (1400, 350), 1)
+groundLine                  = lineObj((0,0,0,), (0, 350), (1400, 350), 10)
 
 woodListV                    = [(910,225.5),(910,308.5),(1093,225.5),(1093,308.5)]
 woodBigListH                 = [(1000,174)]
@@ -67,9 +73,9 @@ def addWood():
         middle.add(woodObj(imageBigWood,w,"horizontal",imageBigWoodBroken))
 
 
-backend.add(groundLine)
 backend.add(background)
 backend.add(catapulteArriere)
+backend.add(groundLine)
 backend.add(line1)
 
 addWood()

@@ -25,9 +25,9 @@ def run():
     m           = 2        # masse en kg de l'oiseau
     k           = 200      # constante de raideur de l'élastique en N/m
     L0          = 0.1      # longueur à vide de l'élastique en m
-    e           = 5 / 9    # coefficient de restitution
+    e           = init.e   # coefficient de restitution (5/9)
     g           = 9.81     # intensité de pensanteur
-    intervalle  = 1/60     # pour correspondre aux 60 fps
+    intervalle  = init.intervalle     # pour correspondre aux 60 fps
     totalTime   = 0        # on initialise le tmp à 0s
     angle       = asin(sintheta(x0, y0, x1, y1))
 
@@ -65,7 +65,7 @@ def run():
 
     r = 0 # nombre de rebonds
 
-    while Tf >= 0.1 or r <= 2:
+    while Tf >= 0.4 or r <= 2:
         v0x     *= e                        # coefficient de restitution
         v0y     = -1 * (v0y - g * Tf) * e   # on recalcule v0y après chute libre et on applique le coef
         lastY   = P[-1][1]                  # les derniers points sont utilisés comme condition initiale
