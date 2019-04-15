@@ -15,6 +15,7 @@ def run():
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 init.inMove = False
+                init.middle.empty()
                 for obj in init.allSprites :
                     obj.reset()
             if event.key == pygame.K_ESCAPE:

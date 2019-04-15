@@ -62,6 +62,7 @@ catapulteAvant              = decor("catapulteAvant",imageCatapulteAvant,(148, 1
 # Sprites/objets en mouvement
 bird                        = birdObj("bird",imageBird,(177, 172),25,imageBirdCloud,imageBirdCrush)
 pig                         = pigObj("pig",imagePig,(1000, 326),24,imageBirdCloud)
+pig2                         = pigObj("pig",imagePig,(600, 326),24,imageBirdCloud)
 line1                       = lineObj((48, 23, 8), (200, 180), (160, 177), 20)
 line2                       = lineObj((48, 23, 8), (160, 177), (160, 177), 0)
 groundLine                  = lineObj((0,0,0,), (0, 350), (1400, 350), 10)
@@ -83,7 +84,9 @@ for w in woodBigListH :
     middle.add(woodObj(imageBigWood,w,"horizontal",imageBigWoodBroken))
     allSprites.add(woodObj(imageBigWood,w,"horizontal",imageBigWoodBroken))
 middle.add(pig)
+middle.add(pig2)
 allSprites.add(pig)
+allSprites.add(pig2)
 middle.add(bird)
 allSprites.add(bird)
 

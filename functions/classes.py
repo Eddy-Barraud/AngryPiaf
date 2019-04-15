@@ -123,6 +123,7 @@ class birdObj(pygame.sprite.Sprite):
         self.points       = []
         self.state        = "normal"
         self.image        = self.imageNormal
+        init.middle.add(self)
 
     ###--------------------------------------------------------------------------------------------------------------
     def disparait(self):
@@ -227,9 +228,9 @@ class woodObj(pygame.sprite.Sprite):
             self.move()
                         
         # Même principe que le cochon pour les effets de disparition
-        if self.die == True and self.countdown < 7:
+        if self.die == True and self.countdown < 3:
             self.countdown += 1
-        elif self.die == True and self.countdown >= 7:
+        elif self.die == True and self.countdown >= 3:
             self.remove(init.middle)
             # On reset les variables
             self.die        = False
