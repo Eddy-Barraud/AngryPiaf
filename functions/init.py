@@ -3,7 +3,6 @@ from functions.classes import *
 import os
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (245,190) #position initiale de la fenêtre
 
-global verif,inMove,coord,assets,background,bird,birdCrush,birdCloud,catapulteAvant,catapulteArriere,surface,clock,coord,backend,running,values,valuesTraj,intervalle,fps
 
 # Variables globales
 running     = True
@@ -14,6 +13,7 @@ valuesTraj  = ""
 fps         = 60
 intervalle  = 1/fps
 e           = 5/9
+eCol        = 8/9
 
 # Initialisation global pygame
 pygame.init()

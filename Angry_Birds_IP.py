@@ -39,6 +39,7 @@ import functions.loop as loop
         Cette fonction est appelée par loop, lorsqu'on lache la souris après avoir visé
         Elle n'est toute fois pas chargée ici
 """
+from functions.classes import *
 
 ###------------------------------------------------------------------------------------------------------------###
 # Boucle draw qui tourne en continu afin de lancer toutes les fonctions à chaque tics
@@ -64,3 +65,10 @@ while True:
         init.front.draw(init.surface)
 
         init.pygame.display.update()
+
+        objInMove = 0
+        for obj in init.middle :
+                if type(obj) == birdObj and obj.pointnb != -1 :
+                        objInMove+=1
+        if objInMove == 0 :
+                init.inMove = False

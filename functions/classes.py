@@ -1,6 +1,7 @@
 import pygame
 import functions.init as init
 import functions.rebond as rebond
+import functions.collision as collision
 from math import sqrt
 
 class decor(pygame.sprite.Sprite):
@@ -43,7 +44,7 @@ class birdObj(pygame.sprite.Sprite):
         if self.pointnb >= 0:
             self.move()
         
-        if init.groundLine.rect.collidepoint(self.rect.bottomright) and self.vy < 0 and self.pointnb > 5 and len(self.points) > 23 :
+        if init.groundLine.rect.collidepoint(self.rect.bottomright) and self.vy < 0 and self.pointnb > 4 and len(self.points) > 18 :
             rebond.run(self,"horizontal")
         
 
@@ -60,7 +61,7 @@ class birdObj(pygame.sprite.Sprite):
             self.state = "normal"
             self.pointnb            = -1
             self.points             = 0
-            init.inMove = False
+            #init.inMove = False
             return
 
         i=self.points[self.pointnb]
@@ -175,20 +176,24 @@ class woodObj(pygame.sprite.Sprite):
         if self.pointnb >= 0:
             self.move()
 
-        for bird in init.middle:
-            if type(bird) == birdObj and self.rect.collidepoint(bird.rect.bottomright) and bird.vy < 0 and bird.pointnb > 3 and len(bird.points) > 25:
-                if bird.rect.top <= self.rect.top and self.orientation == "horizontal" : # alors arrive sur le dessus
-                    if bird.vitesse <= 10 :        # si vitesse faible rebond
+        for bird in init.middle:                        # Des qu'un oiseau entre en contact avec le bois, on change sa trajectoire
+            if type(bird) == birdObj and (self.rect.collidepoint(bird.rect.bottomright) or self.rect.collidepoint(bird.rect.bottomleft)) and bird.pointnb > 3 and len(bird.points) > 17:
+                if self.orientation == "horizontal" : # alors arrive sur le dessus
+                    if bird.vitesse <= 9 and self.state != "broken" :  # si vitesse faible rebond sauf si déjà fragilisé
                         rebond.run(bird,"horizontal")
-                    else :                          # si vitesse trop élevée alors casse
+                        self.state = "broken"
+                    else :                              # si vitesse trop élevée alors casse
                         self.disparait()
-                        # effectuer collision --> ralentissement ?
-                else:                              # alors arrive sur le côté
-                    if bird.vitesse <= 10 :        # si vitesse faible rebond
-                        rebond.run(bird,"vertical")
-                    else :                          # si vitesse trop élevée alors casse
+                        collision.run(bird)  # collision qui ralentie l'obj
+                else:                                   # alors arrive sur le côté
+                    if bird.vitesse <= 9 and self.state != "broken" :  # si vitesse faible rebond sauf si déjà fragilisé
+                        self.state = "broken"
+                        rebond.run(bird,"vertical")     # rebondi sur la paroie et la fragilise
+                    else :                              # si vitesse trop élevée alors casse
+                        self.state = "broken"
                         self.disparait()
-                        # effectuer collision --> ralentissement ?
+                        collision.run(bird)  # collision qui ralentie l'obj
+                        
 
         if self.die == True and self.countdown < 7:
             self.countdown += 1
@@ -201,7 +206,7 @@ class woodObj(pygame.sprite.Sprite):
 
     
     def disparait(self):
-        self.image    = self.imageBroken
+        self.state = "broken"
         self.die   = True
 
     def move(self):

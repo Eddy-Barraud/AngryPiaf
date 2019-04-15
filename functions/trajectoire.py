@@ -18,7 +18,7 @@ def run():
     ### INI
     # On enregistre les coordonnées de l'oiseau au moment du laché de la souris
 
-    x0, y0 = init.coord[0], 349 - init.coord[1]     # On inverse les coord Y pour faire les calculs
+    x0, y0 = init.coord[0], 349 - init.coord[1]     # On inverse les coord Y pour faire les calculs, 349 pour ne pas toucher la groundLine
     x1, y1 = 177, 177                               # emplacement de l'origine de l'élastique
     x0,y0,x1,y1 = x0/100, y0/100, x1/100, y1/100    # on applique l'échelle 1m=100px
 
@@ -100,3 +100,29 @@ def run():
     init.valuesTraj+=f'angle: {round(angle*180/(pi),2)} \n'
     return P  # 100 px = 1 m
 
+
+def basicTraj(lastX,lastY,v0x,v0y): # fonction qui renvoie une liste de point pour une simple chute libre avec CI
+    
+    g           = 9.81     # intensité de pensanteur
+    intervalle  = init.intervalle     # pour correspondre aux 60 fps
+
+    def Y(t):
+            return -g * 0.5 * t ** 2 + v0y * t + lastY
+
+    def X(t):
+        return v0x * t + lastX
+
+    Tf = (v0y + sqrt(v0y ** 2 + 2 * g * lastY)) / g
+    T = 0
+    P = []
+    while T <= Tf: 
+        P += [[X(T), Y(T)]]
+        T += init.intervalle
+    P += [[X(Tf), Y(Tf)]]
+
+    for i in range(len(P)):
+        P[i][0]*=100
+        P[i][1]*=100
+        P[i][1] = 355 - P[i][1]
+
+    return P
