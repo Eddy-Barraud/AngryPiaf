@@ -49,15 +49,9 @@ class birdObj(pygame.sprite.Sprite):
         
 
     def move(self):
-        if self.pointnb == len(self.points): 
-            # Animation : nuage de disparition
-            pygame.time.wait(200)
-            self.state = "cloud"
-            self.pointnb+=1
-            return
 
-        if self.pointnb == len(self.points)+1: # si dernier point passé, effacer les listes,numeros...
-            pygame.time.wait(650)
+        if self.pointnb == len(self.points): # si dernier point passé, effacer les listes,numeros...
+            pygame.time.wait(350)
             self.state = "normal"
             self.pointnb            = -1
             self.points             = 0
@@ -76,8 +70,15 @@ class birdObj(pygame.sprite.Sprite):
             init.line2.end_pos = (i[0] - 10, i[1])
             init.line2.width = 7
 
-        if i == self.points[-2]: # On passe a l'état crush à l'avant dernier point            
+        if i == self.points[-5]: # On passe a l'état crush 5 points avant la fin           
             self.state = "crush"
+
+        if i == self.points[-1]:
+            # Animation : nuage de disparition
+            self.state = "cloud"
+            self.image    = self.imageCloud
+            self.pointnb+=1
+            return
 
         self.vx         = (self.points[self.pointnb][0]-self.points[self.pointnb-1][0]) / (1/60) # vx = dx/dt
         self.vx        *= 1/100 # 100px = 1m

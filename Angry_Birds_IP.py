@@ -1,7 +1,6 @@
 #                                                                                            #
 ##################################### {{{ Angry Piaf }}} #####################################
-#                                                                                            #
-
+#                   
 """ On initialise le jeux et on déclare les variables "globales", plutard accessibles via "init.variable"
     Les images sont chargées, etc...
 """
@@ -44,8 +43,10 @@ from functions.classes import *
 ###------------------------------------------------------------------------------------------------------------###
 # Boucle draw qui tourne en continu afin de lancer toutes les fonctions à chaque tics
 
+clock = init.pygame.time.Clock()
+
 while True:
-        init.clock.tick(init.fps)
+        
         init.surface.fill((255, 255, 255))
         init.backend.update()
         init.backend.draw(init.surface)
@@ -58,17 +59,11 @@ while True:
 
         loop.run()
 
-        init.middle.update()
-        init.middle.draw(init.surface)
+        # Fonction pour économiser du CPU quand il ne se passe rien
+        if init.pygame.mouse.get_pressed() != (1, 0, 0) and init.inMove == False:
+                # pygame.time.wait(50)
+                clock.tick(10)
+        else:
+                clock.tick(init.fps)
 
-        init.front.update()
-        init.front.draw(init.surface)
-
-        init.pygame.display.update()
-
-        objInMove = 0
-        for obj in init.middle :
-                if type(obj) == birdObj and obj.pointnb != -1 :
-                        objInMove+=1
-        if objInMove == 0 :
-                init.inMove = False
+        

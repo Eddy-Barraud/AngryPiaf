@@ -1,6 +1,7 @@
 import pygame,sys
 import functions.init as init
 import functions.move as move
+from functions.classes import *
 
 def run():
     # Fausse boucle for afin de récupérer les évènements
@@ -20,6 +21,13 @@ def run():
                 init.running = False
                 pygame.quit()
                 sys.exit()
+            if event.key == pygame.K_b : # on remet l'oiseau sur catapulte si b
+                init.inMove = False
+                for obj in init.allSprites :
+                    if type(obj) == birdObj :
+                        obj.reset()
+
+
         # Si l'utilisateur redimensionne la fenêtre
         '''elif event.type == pygame.VIDEORESIZE:
             init.surface = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
@@ -30,7 +38,16 @@ def run():
             init.verif = False
             move.run()
 
-    # Fonction pour économiser du CPU quand il ne se passe rien
-    if pygame.mouse.get_pressed() != (1, 0, 0) and init.inMove == False:
-        # pygame.time.wait(50)
-        init.clock.tick(10)
+    # Update des tous les groupes de sprite
+    init.middle.update()
+    init.middle.draw(init.surface)
+
+    init.front.update()
+    init.front.draw(init.surface)
+
+    init.pygame.display.update()
+
+    # Vérification que l'oiseau est en mouvement
+    if init.bird.pointnb == -1:
+            init.inMove = False
+    
