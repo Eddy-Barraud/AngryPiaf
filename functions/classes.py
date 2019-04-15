@@ -19,6 +19,7 @@ class birdObj(pygame.sprite.Sprite):
         self.state        = state
         self.image        = image
         self.rect         = self.image.get_rect()
+        self.resetPos     = position
         self.rect.center  = position
         self.radius       = radius
 
@@ -42,15 +43,9 @@ class birdObj(pygame.sprite.Sprite):
         if self.pointnb >= 0:
             self.move()
         
-        if init.groundLine.rect.collidepoint(self.rect.bottomright) and self.vy < 0 and self.pointnb > 3 :
+        if init.groundLine.rect.collidepoint(self.rect.bottomright) and self.vy < 0 and self.pointnb > 5 and len(self.points) > 23 :
             rebond.run(self,"horizontal")
-        for wood in init.middle:
-            if type(wood) == woodObj and wood.rect.collidepoint(self.rect.bottomright) and self.vy < 0 and self.pointnb > 3:
-                print(f'{self.rect.bottom}<>{wood.rect.top}')
-                if self.rect.top <= wood.rect.top : # alors rebond sur le dessus
-                    rebond.run(self,"horizontal")
-                else :                                                 # alors rebond sur le côté
-                    rebond.run(self,"vertical")
+        
 
     def move(self):
         if self.pointnb == len(self.points): 
@@ -92,6 +87,16 @@ class birdObj(pygame.sprite.Sprite):
         self.rect.midbottom    = i
         self.pointnb        += 1
 
+    def reset(self):
+        self.rect.center  = self.resetPos
+        self.vitesse      = 0
+        self.vx           = 0
+        self.vy           = 0
+        self.pointnb      = -1
+        self.points       = []
+        self.state        = "normal"
+
+
 class pigObj(pygame.sprite.Sprite):
     """ Définition d'un objet de type cochon """
     def __init__(self, name, image, position,radius,cloud):
@@ -99,6 +104,7 @@ class pigObj(pygame.sprite.Sprite):
         self.name         = name
         self.image        = image
         self.rect         = self.image.get_rect()
+        self.resetPos     = position
         self.rect.center  = position
         self.radius       = radius
         self.imageCloud   = cloud
@@ -113,7 +119,7 @@ class pigObj(pygame.sprite.Sprite):
         if self.die == True and self.countdown < 7:
             self.countdown += 1
         elif self.die == True and self.countdown >= 7:
-            self.kill()
+            self.remove(init.middle)
             # On reset les variables
             self.die        = False
             self.image      = self.imageNormal
@@ -123,42 +129,111 @@ class pigObj(pygame.sprite.Sprite):
         self.image    = self.imageCloud
         self.die   = True
 
+    
+    def reset(self):
+        self.rect.center  = self.resetPos
+        self.die   = False
+        self.image      = self.imageNormal
+        self.countdown  = 0
+        init.middle.add(self)
+
+
 class woodObj(pygame.sprite.Sprite):
     """ Définition d'un objet de type bois """
-    def __init__(self, image, position,orientation,cloud):
+    def __init__(self, image, position,orientation,broken):
         pygame.sprite.Sprite.__init__(self)
         self.image        = image
         self.rect         = self.image.get_rect()
         self.rect.center  = position
+        self.resetPos     = position
+        self.die          = False
+        self.orientation  = orientation
         self.die          = False
         self.countdown    = 0
-        self.orientation  = orientation
+        self.vx           = 0
+        self.vy           = 0
+        self.vitesse      = 0
+        self.state        = "normal"
+        self.pointnb      = -1
+        self.points       = []
+
         if orientation == "horizontal" :
-            self.imageCloud   = cloud
-            self.imageNormal  = image
+            self.imageBroken    = broken
+            self.imageNormal    = image
         elif orientation == "vertical" :
-            self.image        = pygame.transform.rotate(image,90)
-            self.rect         = self.image.get_rect()
-            self.rect.center  = position
-            self.imageCloud   = pygame.transform.rotate(cloud,90)
-            self.imageNormal  = pygame.transform.rotate(image,90)
+            self.image          = pygame.transform.rotate(image,90)
+            self.rect           = self.image.get_rect()
+            self.rect.center    = position
+            self.imageBroken    = pygame.transform.rotate(broken,90)
+            self.imageNormal    = pygame.transform.rotate(image,90)
 
     def update(self):
-        for i in init.middle:
-            if i != self and type(i) == birdObj and pygame.sprite.collide_rect(self, i):
-                self.disparait()
+        if self.state    == "normal":
+            self.image    = self.imageNormal
+        elif self.state  == "broken":
+            self.image    = self.imageBroken
+        if self.pointnb >= 0:
+            self.move()
+
+        for bird in init.middle:
+            if type(bird) == birdObj and self.rect.collidepoint(bird.rect.bottomright) and bird.vy < 0 and bird.pointnb > 3 and len(bird.points) > 25:
+                if bird.rect.top <= self.rect.top and self.orientation == "horizontal" : # alors arrive sur le dessus
+                    if bird.vitesse <= 10 :        # si vitesse faible rebond
+                        rebond.run(bird,"horizontal")
+                    else :                          # si vitesse trop élevée alors casse
+                        self.disparait()
+                        # effectuer collision --> ralentissement ?
+                else:                              # alors arrive sur le côté
+                    if bird.vitesse <= 10 :        # si vitesse faible rebond
+                        rebond.run(bird,"vertical")
+                    else :                          # si vitesse trop élevée alors casse
+                        self.disparait()
+                        # effectuer collision --> ralentissement ?
+
         if self.die == True and self.countdown < 7:
             self.countdown += 1
         elif self.die == True and self.countdown >= 7:
-            self.kill()
+            self.remove(init.middle)
             # On reset les variables
             self.die        = False
             self.image      = self.imageNormal
             self.countdown  = 0
 
+    
     def disparait(self):
-        self.image    = self.imageCloud
+        self.image    = self.imageBroken
         self.die   = True
+
+    def move(self):
+
+        if self.pointnb == len(self.points)+1: # si dernier point passé, effacer les listes,numeros...
+            self.state = "normal"
+            self.pointnb            = -1
+            self.points             = 0
+            return
+
+        i=self.points[self.pointnb]
+
+        self.vx         = (self.points[self.pointnb][0]-self.points[self.pointnb-1][0]) / (1/60) # vx = dx/dt
+        self.vx        *= 1/100 # 100px = 1m
+        self.vy         = (self.points[self.pointnb][1]-self.points[self.pointnb-1][1]) / (1/60)
+        self.vy        *= -1/100 # 100px = 1m et y vers le haut
+        self.vitesse    = sqrt(self.vx**2+self.vy**2)
+
+        self.rect.midbottom    = i
+        self.pointnb        += 1
+
+    def reset(self):
+        self.rect.center  = self.resetPos
+        self.vitesse      = 0
+        self.vx           = 0
+        self.vy           = 0
+        self.pointnb      = -1
+        self.points       = []
+        self.state        = "normal"
+        self.die          = False
+        self.countdown    = 0
+        init.middle.add(self)
 
 class lineObj(pygame.sprite.Sprite):
     """ Définition d'un objet de type ligne """
@@ -167,7 +242,7 @@ class lineObj(pygame.sprite.Sprite):
         self.color        = color
         self.start_pos    = start_pos
         self.end_pos      = end_pos
-        self.end_posLast      = end_pos
+        self.end_posLast  = end_pos
         self.width        = width
         self.widthLast    = width
         self.image        = pygame.Surface([init.WIDTH,init.HEIGHT], pygame.SRCALPHA)
@@ -183,4 +258,4 @@ class lineObj(pygame.sprite.Sprite):
             self.rect             = self.image.get_rect()
             self.end_posLast      = self.end_pos
             self.widthLast        = self.width
-
+        

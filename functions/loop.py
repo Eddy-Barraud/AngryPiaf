@@ -14,9 +14,8 @@ def run():
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 init.inMove = False
-                init.bird.pointnb = -1
-                init.middle.add(init.pig)
-                init.addWood()
+                for obj in init.allSprites :
+                    obj.reset()
             if event.key == pygame.K_ESCAPE:
                 init.running = False
                 pygame.quit()

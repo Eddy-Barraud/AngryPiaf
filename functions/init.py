@@ -21,9 +21,9 @@ WIDTH=1400
 HEIGHT=409
 surface     = pygame.display.set_mode((WIDTH, HEIGHT))
 backend     = pygame.sprite.Group() # groupe de sprites décor du fond
-middle      = pygame.sprite.Group() # groupe de sprites décor du fond
-front       = pygame.sprite.Group() # groupe de sprites décor du fond
-
+middle      = pygame.sprite.Group() # groupe de sprites décor du milieu
+front       = pygame.sprite.Group() # groupe de sprites décor du devant
+allSprites  = pygame.sprite.Group() # groupe de sprite pour tous les objets du milieu
 pygame.display.set_caption("Angry Piaf ;)")
 clock = pygame.time.Clock()
 
@@ -66,11 +66,6 @@ groundLine                  = lineObj((0,0,0,), (0, 350), (1400, 350), 10)
 woodListV                    = [(910,225.5),(910,308.5),(1093,225.5),(1093,308.5)]
 woodBigListH                 = [(1000,174)]
 
-def addWood():
-    for w in woodListV :
-        middle.add(woodObj(imageWood,w,"vertical",imageWoodBroken))
-    for w in woodBigListH :
-        middle.add(woodObj(imageBigWood,w,"horizontal",imageBigWoodBroken))
 
 
 backend.add(background)
@@ -78,9 +73,16 @@ backend.add(catapulteArriere)
 backend.add(groundLine)
 backend.add(line1)
 
-addWood()
+for w in woodListV :
+    middle.add(woodObj(imageWood,w,"vertical",imageWoodBroken))
+    allSprites.add(woodObj(imageWood,w,"vertical",imageWoodBroken))
+for w in woodBigListH :
+    middle.add(woodObj(imageBigWood,w,"horizontal",imageBigWoodBroken))
+    allSprites.add(woodObj(imageBigWood,w,"horizontal",imageBigWoodBroken))
 middle.add(pig)
+allSprites.add(pig)
 middle.add(bird)
+allSprites.add(bird)
 
 front.add(line2)
 front.add(catapulteAvant)

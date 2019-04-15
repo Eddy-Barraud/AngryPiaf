@@ -11,8 +11,8 @@ def run(x,y):
         if 150 <= x <= 225 and y >= 215:
 
             # Prise des coordonnées de l'oiseau par rapport à la souris grace à la trigo
-            init.coord                  =[(int(65 * ((x - 177) / (sqrt((x - 177) ** 2 + (y - 150) ** 2))) + 177),
-                                            (int(65 * ((y - 150) / (sqrt((x - 177) ** 2 + (y - 150) ** 2))) + 150)))]
+            init.coord                  =[int(65 * ((x - 177) / (sqrt((x - 177) ** 2 + (y - 150) ** 2))) + 177),
+                                            (int(65 * ((y - 150) / (sqrt((x - 177) ** 2 + (y - 150) ** 2))) + 150))]
 
             # Affichage de l'élastique arrière
             init.line1.end_pos          = (init.coord[0] - 10, init.coord[1] - 2)

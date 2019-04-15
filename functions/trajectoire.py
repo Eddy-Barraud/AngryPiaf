@@ -18,7 +18,7 @@ def run():
     ### INI
     # On enregistre les coordonnées de l'oiseau au moment du laché de la souris
 
-    x0, y0 = init.coord[0], 350 - init.coord[1]     # On inverse les coord Y pour faire les calculs
+    x0, y0 = init.coord[0], 349 - init.coord[1]     # On inverse les coord Y pour faire les calculs
     x1, y1 = 177, 177                               # emplacement de l'origine de l'élastique
     x0,y0,x1,y1 = x0/100, y0/100, x1/100, y1/100    # on applique l'échelle 1m=100px
 
@@ -91,7 +91,7 @@ def run():
     for i in range(len(P)):
         P[i][0]*=100
         P[i][1]*=100
-        P[i][1] = 350 - P[i][1]
+        P[i][1] = 349 - P[i][1]
 
     pygame.draw.lines(init.surface, (0, 0, 0), False, P, 3)
     init.valuesTraj=f'distance (m): {round(P[-1][0]/100,2)} \n'
