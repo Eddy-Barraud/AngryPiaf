@@ -1,7 +1,7 @@
 import pygame, sys
 from functions.classes import *
 import os
-os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (245,190) #position initiale de la fenêtre
+os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (245,190) #position initiale de la fenêtre pygame
 
 
 # Variables globales
@@ -20,19 +20,20 @@ pygame.init()
 WIDTH=1400
 HEIGHT=409
 surface     = pygame.display.set_mode((WIDTH, HEIGHT))
-backend     = pygame.sprite.Group() # groupe de sprites décor du fond
-middle      = pygame.sprite.Group() # groupe de sprites décor du milieu
-front       = pygame.sprite.Group() # groupe de sprites décor du devant
-allSprites  = pygame.sprite.Group() # groupe de sprite pour tous les objets du milieu
+backend     = pygame.sprite.Group()                     # groupe de sprites décor du fond
+middle      = pygame.sprite.Group()                     # groupe de sprites décor du milieu
+front       = pygame.sprite.Group()                     # groupe de sprites décor du devant
+allSprites  = pygame.sprite.Group()                     # groupe de sprite pour tous les objets du milieu
 pygame.display.set_caption("Angry Piaf ;)")
 clock = pygame.time.Clock()
 
 
 # Sprites Sheets
+
 assets  = pygame.image.load('image/assets.png').convert_alpha()
 assetsWood  = pygame.image.load('image/ingame_blocks_wood.png').convert_alpha()
 
-# Sprites Simple
+# Sprites Simple, récupération des "bouts" d'image
 
 imageBird                   = assets.subsurface(902, 798, 48, 44)
 imageBirdCrush              = assets.subsurface(904,888, 49, 44)
@@ -51,6 +52,8 @@ imageWood                   = assetsWood.subsurface(288,345, 83, 20)
 imageBigWood             = assetsWood.subsurface(289,169, 203, 20)
 imageBigWoodBroken                   = assetsWood.subsurface(289,235, 203, 20)
 
+# Création des objets :
+
 # Sprites/objets du décor
 background                  = decor("background",imageBackground,(0,0))
 catapulteArriere            = decor("catapulteArriere",imageCatapulteArriere,(175, 150))
@@ -66,7 +69,7 @@ groundLine                  = lineObj((0,0,0,), (0, 350), (1400, 350), 10)
 woodListV                    = [(910,225.5),(910,308.5),(1093,225.5),(1093,308.5)]
 woodBigListH                 = [(1000,174)]
 
-
+# Ajout des Sprites dans leur Groupe de Sprite
 
 backend.add(background)
 backend.add(catapulteArriere)
@@ -87,4 +90,5 @@ allSprites.add(bird)
 front.add(line2)
 front.add(catapulteAvant)
 
+# Lancement de la fenêtre d'infos
 import functions.infoWindow

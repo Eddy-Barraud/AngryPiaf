@@ -27,10 +27,12 @@ def run():
     L0          = 0.1      # longueur à vide de l'élastique en m
     e           = init.e   # coefficient de restitution (5/9)
     g           = 9.81     # intensité de pensanteur
-    intervalle  = init.intervalle     # pour correspondre aux 60 fps
     totalTime   = 0        # on initialise le tmp à 0s
+    intervalle  = init.intervalle     # pour correspondre aux 60 fps
     angle       = asin(sintheta(x0, y0, x1, y1))
 
+    ###Calculs 
+    
     ## Avant rebond -> equation de trajectoire parabolique
     # On calcule la vitesse initiale avec l'energie potentielle élastique, puis on définie une équation de trajectoire (avec comme seule force le poids)
     # On applique l'équation de trajectoire toutes les n ms pour établir une liste de points empruntés par le projectile
@@ -87,19 +89,23 @@ def run():
         r += 1
 
     # On retransforme dans les coord pygame
-    #      
+    
     for i in range(len(P)):
-        P[i][0]*=100
-        P[i][1]*=100
+        P[i][0]*=100                # 100 px = 1 m
+        P[i][1]*=100                # 100 px = 1 m
         P[i][1] = 349 - P[i][1]
 
-    pygame.draw.lines(init.surface, (0, 0, 0), False, P, 3)
-    init.valuesTraj=f'distance (m): {round(P[-1][0]/100,2)} \n'
-    init.valuesTraj+=f'total points: {len(P)} \n'
-    init.valuesTraj+=f'total time: {round(totalTime,2)} \n'
-    init.valuesTraj+=f'angle: {round(angle*180/(pi),2)} \n'
-    return P  # 100 px = 1 m
+    pygame.draw.lines(init.surface, (0, 0, 0), False, P, 3)         # Affichage instanné de la courbe de trajectoire
 
+    init.valuesTraj=f'distance (m): {round(P[-1][0]/100,2)} \n' #####
+    init.valuesTraj+=f'total points: {len(P)} \n'               # Ajout des valeures calculées
+    init.valuesTraj+=f'total time: {round(totalTime,2)} \n'     # pour la fenêtre d'info
+    init.valuesTraj+=f'angle: {round(angle*180/(pi),2)} \n'     #####
+
+    return P  
+
+
+# Pour les fonctions rebond et collision :
 
 def basicTraj(lastX,lastY,v0x,v0y): # fonction qui renvoie une liste de point pour une simple chute libre avec CI
     
@@ -117,7 +123,7 @@ def basicTraj(lastX,lastY,v0x,v0y): # fonction qui renvoie une liste de point po
     P = []
     while T <= Tf: 
         P += [[X(T), Y(T)]]
-        T += init.intervalle
+        T += intervalle
     P += [[X(Tf), Y(Tf)]]
 
     for i in range(len(P)):

@@ -60,7 +60,6 @@ while True:
 
         # Fonction pour économiser du CPU quand il ne se passe rien
         if init.pygame.mouse.get_pressed() != (1, 0, 0) and init.inMove == False:
-                # pygame.time.wait(50)
                 clock.tick(10)
         else:
                 clock.tick(init.fps)
