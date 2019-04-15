@@ -44,6 +44,9 @@ class birdObj(pygame.sprite.Sprite):
         self.vitesse      = 0
         self.vx           = 0
         self.vy           = 0
+        
+        self.die          = False
+        self.countdown    = 0
 
     ###--------------------------------------------------------------------------------------------------------------
     def update(self):
@@ -55,6 +58,13 @@ class birdObj(pygame.sprite.Sprite):
         elif self.state  == "crush":                #
             self.image    = self.imageCrush         ####
 
+        # Un compte à rebourd est incrémenté afin de voir le nuage de disparition
+        if self.die == True and self.countdown < 30:
+            self.countdown += 1
+        # Après le compte à rebourd, on fait disparaître le cochon
+        elif self.die == True and self.countdown >= 30:
+            self.reset()
+
         if self.pointnb >= 0:                       # Si le numéro du point actuel de l'oiseau est >0
             self.move()                             # alors on le fait bouger et suivre les points de sa liste
         
@@ -62,18 +72,9 @@ class birdObj(pygame.sprite.Sprite):
             and self.vy < 0 and self.pointnb > 4 and len(self.points) > 18) :   # Si l'oiseau rentre en contact 
                                                                                 # avec la groundLine alors rebond
             rebond.run(self,"horizontal")       
-        
 
     ###--------------------------------------------------------------------------------------------------------------
     def move(self):
-
-        if self.pointnb == len(self.points): # si dernier point passé, effacer les listes,numeros...
-            pygame.time.wait(350)
-            self.state = "normal"
-            self.pointnb            = -1
-            self.points             = 0
-            #init.inMove = False
-            return
 
         i=self.points[self.pointnb]           # point actuel
 
@@ -94,9 +95,7 @@ class birdObj(pygame.sprite.Sprite):
 
         if i == self.points[-1]:
             # Animation : nuage de disparition
-            self.state = "cloud"
-            self.image    = self.imageCloud
-            self.pointnb+=1
+            self.disparait()
             return
 
         # Calcul de la vitesse par dérivée :
@@ -118,9 +117,18 @@ class birdObj(pygame.sprite.Sprite):
         self.vitesse      = 0
         self.vx           = 0
         self.vy           = 0
+        self.die          = False
+        self.countdown    = 0
         self.pointnb      = -1
         self.points       = []
         self.state        = "normal"
+        self.image        = self.imageNormal
+
+    ###--------------------------------------------------------------------------------------------------------------
+    def disparait(self):
+        self.image    = self.imageCloud
+        self.state = "cloud"
+        self.die   = True
 
 #########################################################################################################################
 ######################----------------------------------- Pig -----------------------------------########################
