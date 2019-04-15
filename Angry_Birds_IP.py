@@ -38,7 +38,6 @@ import functions.loop as loop
         Cette fonction est appelée par loop, lorsqu'on lache la souris après avoir visé
         Elle n'est toute fois pas chargée ici
 """
-from functions.classes import *
 
 ###------------------------------------------------------------------------------------------------------------###
 # Boucle draw qui tourne en continu afin de lancer toutes les fonctions à chaque tics
