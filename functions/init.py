@@ -13,7 +13,7 @@ valuesTraj  = ""
 fps         = 60
 intervalle  = 1/fps
 e           = 5/9
-eCol        = 8/9
+eCol        = 6/9
 
 # Initialisation global pygame
 pygame.init()
@@ -62,13 +62,13 @@ catapulteAvant              = decor("catapulteAvant",imageCatapulteAvant,(148, 1
 # Sprites/objets en mouvement
 bird                        = birdObj("bird",imageBird,(177, 172),25,imageBirdCloud,imageBirdCrush)
 pig                         = pigObj("pig",imagePig,(1000, 326),24,imageBirdCloud)
-pig2                         = pigObj("pig",imagePig,(600, 326),24,imageBirdCloud)
+pig2                         = pigObj("pig",imagePig,(800, 326),24,imageBirdCloud)
 line1                       = lineObj((48, 23, 8), (200, 180), (160, 177), 20)
 line2                       = lineObj((48, 23, 8), (160, 177), (160, 177), 0)
-groundLine                  = lineObj((0,0,0,), (0, 350), (1400, 350), 10)
+groundLine                  = lineObj((0,0,0,), (0, 350), (1400, 350), 20)
 
-woodListV                    = [(910,225.5),(910,308.5),(1093,225.5),(1093,308.5)]
-woodBigListH                 = [(1000,174)]
+woodListV                    = [(910,225.5),(910,308.5),(1093,225.5),(1093,308.5),(707,308.5),(890,308.5)]
+woodBigListH                 = [(1000,174),(800,257)]
 
 # Ajout des Sprites dans leur Groupe de Sprite
 

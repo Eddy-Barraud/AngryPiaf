@@ -240,7 +240,7 @@ class woodObj(pygame.sprite.Sprite):
         # Gestion de la collision des oiseau avec le bois
 
         for bird in init.middle:                        # Des qu'un oiseau entre en contact avec le bois, on change sa trajectoire
-            if type(bird) == birdObj and (self.rect.collidepoint(bird.rect.bottomright) or self.rect.collidepoint(bird.rect.bottomleft)) and bird.pointnb > 3 and len(bird.points) > 17:
+            if type(bird) == birdObj and self.rect.colliderect(bird) and bird.pointnb > 3:
                 bird.state = "crush"
                 if self.orientation == "horizontal" : # alors arrive sur le dessus
                     if bird.vitesse <= 9 and self.state != "broken" :  # si vitesse faible rebond sauf si déjà fragilisé
