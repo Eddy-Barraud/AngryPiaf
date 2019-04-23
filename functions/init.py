@@ -14,8 +14,8 @@ fps         = 60
 intervalle  = 1/fps
 e           = 5/9
 eCol        = 6/9
-WIDTH=1400
-HEIGHT=409
+WIDTH       = 1400
+HEIGHT      = 409
 
 # Initialisation global pygame
 pygame.init()
