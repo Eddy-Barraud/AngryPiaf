@@ -14,11 +14,11 @@ fps         = 60
 intervalle  = 1/fps
 e           = 5/9
 eCol        = 6/9
+WIDTH=1400
+HEIGHT=409
 
 # Initialisation global pygame
 pygame.init()
-WIDTH=1400
-HEIGHT=409
 surface     = pygame.display.set_mode((WIDTH, HEIGHT))
 backend     = pygame.sprite.Group()                     # groupe de sprites décor du fond
 middle      = pygame.sprite.Group()                     # groupe de sprites décor du milieu
