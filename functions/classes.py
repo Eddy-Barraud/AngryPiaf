@@ -48,6 +48,8 @@ class birdObj(pygame.sprite.Sprite):
         self.die          = False
         self.countdown    = 0
 
+        self.elastique = False
+
     ###--------------------------------------------------------------------------------------------------------------
     def update(self):
         
@@ -61,6 +63,9 @@ class birdObj(pygame.sprite.Sprite):
         # Un compte à rebourd est incrémenté afin de voir le nuage de disparition
         if self.die == True and self.countdown < 30:
             self.countdown += 1
+        # Big Oof
+        if self.die == True and self.countdown == 2:
+            pygame.mixer.Sound.play(init.oof)
         # Après le compte à rebourd, on fait disparaître le cochon
         elif self.die == True and self.countdown >= 30:
             self.reset()
@@ -76,19 +81,25 @@ class birdObj(pygame.sprite.Sprite):
     ###--------------------------------------------------------------------------------------------------------------
     def move(self):
 
-        i=self.points[self.pointnb]           # point actuel
+        if self.pointnb <= len(self.points)-1:
+            i=self.points[self.pointnb]           # point actuel
+        else:
+            i = self.points[self.pointnb-1]
 
-        if i[0] - 153 >= 0 or i[1] - 150 <= 0:                  ####
+        if 127 <= i[0] <= 227 and 122 <= i[1] <= 222:
+            self.elastique = True
+
+        if self.elastique:                                      ####
             init.line1.end_pos = (160, 177)                     #
             init.line1.width = 20                               #
             init.line2.width = 0                                # L'élastique suit l'oiseau dans ses premiers points
         else :                                                  # Pour créer "l'éffet élastique"
-            init.line1.end_pos = (i[0] - 10, i[1] - 2)          #
+            init.line1.end_pos = (i[0], i[1] - 22)              #
             init.line1.width = 7                                #
-            init.line2.end_pos = (i[0] - 10, i[1])              #
+            init.line2.end_pos = (i[0], i[1] - 22)              #
             init.line2.width = 7                                ####
 
-        if i[1] >= 330 : # On passe a l'état crush quand rebond           
+        if i[1] >= 330 : # On passe a l'état crush quand rebond
             self.state = "crush"
         else :
             self.state = "normal"
@@ -109,7 +120,7 @@ class birdObj(pygame.sprite.Sprite):
         # Déplacement de l'objet
 
         self.rect.midbottom    = i  # application des nouvelles coordonnées
-        self.pointnb        += 1    # incrément du numéro de point pour prochaine boucle
+        self.pointnb           += 1    # incrément du numéro de point pour prochaine boucle
 
     ###--------------------------------------------------------------------------------------------------------------
     def reset(self):
@@ -123,6 +134,7 @@ class birdObj(pygame.sprite.Sprite):
         self.points       = []
         self.state        = "normal"
         self.image        = self.imageNormal
+        self.elastique    = False
         init.middle.add(self)
 
     ###--------------------------------------------------------------------------------------------------------------
@@ -169,11 +181,14 @@ class pigObj(pygame.sprite.Sprite):
             self.die        = False
             self.image      = self.imageNormal
             self.countdown  = 0
+        if self.die == True and self.countdown == 1:
+            pygame.mixer.Sound.play(init.ohno)
 
     ###--------------------------------------------------------------------------------------------------------------
     def disparait(self):
         self.image    = self.imageCloud
         self.die   = True
+
 
     
     ###--------------------------------------------------------------------------------------------------------------
@@ -242,20 +257,28 @@ class woodObj(pygame.sprite.Sprite):
         for bird in init.middle:                        # Des qu'un oiseau entre en contact avec le bois, on change sa trajectoire
             if type(bird) == birdObj and self.rect.colliderect(bird) and bird.pointnb > 3:
                 bird.state = "crush"
+
                 if self.orientation == "horizontal" : # alors arrive sur le dessus
                     if bird.vitesse <= 9 and self.state != "broken" :  # si vitesse faible rebond sauf si déjà fragilisé
+                        pygame.mixer.Sound.play(init.brokena)
                         self.state = "broken"
                         rebond.run(bird,"horizontal")
+
                     else :                              # si vitesse trop élevée alors casse
+                        pygame.mixer.Sound.play(init.brokenb)
                         self.disparait()
                         collision.run(bird)  # collision qui ralentie l'obj
+
                 else:                                   # alors arrive sur le côté
                     if bird.vitesse <= 9 and self.state != "broken" :  # si vitesse faible rebond sauf si déjà fragilisé
+                        pygame.mixer.Sound.play(init.brokena)
                         self.state = "broken"
                         rebond.run(bird,"vertical")     # rebondi sur la paroie et la fragilise
                     else :                              # si vitesse trop élevée alors casse
+                        pygame.mixer.Sound.play(init.brokenb)
                         self.disparait()
                         collision.run(bird)  # collision qui ralentie l'obj
+
                         
     ###--------------------------------------------------------------------------------------------------------------
     def disparait(self):

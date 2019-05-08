@@ -7,7 +7,10 @@ from math import pi
 def springLenght(x0, y0, x1, y1):
     return sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2)
 def costheta(x0, y0, x1, y1):
-    return (x1 - x0) / springLenght(x0, y0, x1, y1)
+    if springLenght(x0, y0, x1, y1) != 0:
+        return (x1 - x0) / springLenght(x0, y0, x1, y1)
+    else:
+        return (x1 - x0) / 0.0001
 def sintheta(x0, y0, x1, y1):
     if springLenght(x0, y0, x1, y1) != 0:
         return (y1 - y0) / springLenght(x0, y0, x1, y1)

@@ -11,6 +11,7 @@ inMove      = False
 coord       = [0,0]
 valuesTraj  = ""
 fps         = 60
+curfps      = 0
 intervalle  = 1/fps
 e           = 5/9
 eCol        = 6/9
@@ -49,10 +50,33 @@ imageBackground             = pygame.transform.scale(imageBackground, (1400, 409
 
 imageWoodBroken             = assetsWood.subsurface(373,367, 83, 20)
 imageWood                   = assetsWood.subsurface(288,345, 83, 20)
-imageBigWood             = assetsWood.subsurface(289,169, 203, 20)
-imageBigWoodBroken                   = assetsWood.subsurface(289,235, 203, 20)
+imageBigWood                = assetsWood.subsurface(289,169, 203, 20)
+imageBigWoodBroken          = assetsWood.subsurface(289,235, 203, 20)
 
-# Création des objets :
+music                       = pygame.image.load('image/Sound.png')
+mute                        = pygame.image.load('image/Mute.png')
+
+# Création des sons :
+pygame.mixer.init()
+pygame.mixer.music.load('Sounds/AngryPiafSong.ogg')
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.2)
+
+elastiqueSound              = pygame.mixer.Sound('Sounds/elastique.ogg')
+pygame.mixer.Sound.set_volume(init.elastiqueSound, 0.5)
+brokena                     = pygame.mixer.Sound('Sounds/brokena.ogg')
+pygame.mixer.Sound.set_volume(init.brokena, 0.2)
+brokenb                     = pygame.mixer.Sound('Sounds/brokenb.ogg')
+pygame.mixer.Sound.set_volume(init.brokenb, 0.2)
+lancer                      = pygame.mixer.Sound('Sounds/lancer.ogg')
+pygame.mixer.Sound.set_volume(init.lancer, 0.6)
+oof                         = pygame.mixer.Sound('Sounds/oof.ogg')
+pygame.mixer.Sound.set_volume(init.oof, 0.8)
+ohno                    = pygame.mixer.Sound('Sounds/ohno.ogg')
+pygame.mixer.Sound.set_volume(init.ohno, 0.7)
+
+muteVerif                   = False
+
 
 # Sprites/objets du décor
 background                  = decor("background",imageBackground,(0,0))

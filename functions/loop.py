@@ -27,6 +27,13 @@ def run():
                 for obj in init.allSprites :
                     if type(obj) == birdObj :
                         obj.reset()
+            if event.key == pygame.K_i:
+                if init.muteVerif:
+                    init.muteVerif = False
+                    pygame.mixer.music.play(-1)
+                else:
+                    init.muteVerif = True
+                    pygame.mixer.music.pause()
 
 
         # Si l'utilisateur redimensionne la fenêtre
@@ -46,9 +53,13 @@ def run():
     init.front.update()
     init.front.draw(init.surface)
 
+    if init.muteVerif :
+        init.surface.blit(init.mute, (20, 20))
+    else :
+        init.surface.blit(init.music, (20, 20))
+
     init.pygame.display.update()
 
     # Vérification que l'oiseau est en mouvement
     if init.bird.pointnb == -1:
             init.inMove = False
-    

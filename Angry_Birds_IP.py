@@ -63,5 +63,5 @@ while True:
                 clock.tick(10)
         else:
                 clock.tick(init.fps)
-
+        init.curfps = round(clock.get_fps(),2)
         

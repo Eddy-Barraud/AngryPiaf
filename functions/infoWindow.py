@@ -16,6 +16,7 @@ class infoWindow(Thread):
         win = tkinter.Frame(root)
         win.pack()
         txt = 'b : respawn bird only\n'
+        txt = 'i : mute/unmute music\n'
         txt += 'SPACE : reload game\n'
         txt += 'ESCAPE : quit'
         praticalInfos = tkinter.Label(win,text=txt)
@@ -25,7 +26,7 @@ class infoWindow(Thread):
         verif.pack(anchor='nw')        
         
         while init.running:
-            init.values=f'fps: {round(init.clock.get_fps(),2)}\nverif: {init.verif} \ninMove: {init.inMove} \ncoord: {init.coord}\n'
+            init.values=f'fps: {init.curfps}\nverif: {init.verif} \ninMove: {init.inMove} \ncoord: {init.coord}\n'
             init.values+=f'coord (m): [{init.coord[0]/100},{(350-init.coord[1])/100}] \nbird.pointnb: {init.bird.pointnb}\n'
             init.values+=f'bird.vitesse (m/s): {round(init.bird.vitesse,2)}\n'
             init.values+=init.valuesTraj
