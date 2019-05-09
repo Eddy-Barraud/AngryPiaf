@@ -10,7 +10,15 @@ def run():
         if event.type == pygame.QUIT:
             init.running = False
             pygame.quit()
-            sys.exit()            
+            sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN :
+            if 19 < init.pygame.mouse.get_pos()[0] < 71 and 19 < init.pygame.mouse.get_pos()[1] < 71 :
+                if init.muteVerif:
+                    init.muteVerif = False
+                    pygame.mixer.music.play(-1)
+                else:
+                    init.muteVerif = True
+                    pygame.mixer.music.pause()
         # Si l'utilisateur appuie sur escape
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
