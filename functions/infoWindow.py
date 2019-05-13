@@ -29,6 +29,7 @@ class infoWindow(Thread):
             init.values=f'fps: {init.curfps}\nverif: {init.verif} \ninMove: {init.inMove} \ncoord: {init.coord}\n'
             init.values+=f'coord (m): [{init.coord[0]/100},{(350-init.coord[1])/100}] \nbird.pointnb: {init.bird.pointnb}\n'
             init.values+=f'bird.vitesse (m/s): {round(init.bird.vitesse,2)}\n'
+            init.values+=f'e: {init.e}\n'
             init.values+=init.valuesTraj
             verif.config(text=init.values)
             win.update_idletasks()

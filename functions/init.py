@@ -14,7 +14,7 @@ fps         = 60
 curfps      = 0
 intervalle  = 1/fps
 e           = 5/9
-eCol        = 6/9
+eCol        = 4/9
 WIDTH       = 1400
 HEIGHT      = 409
 
