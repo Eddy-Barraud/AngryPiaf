@@ -72,7 +72,7 @@ lancer                      = pygame.mixer.Sound('Sounds/lancer.ogg')
 pygame.mixer.Sound.set_volume(init.lancer, 0.6)
 oof                         = pygame.mixer.Sound('Sounds/oof.ogg')
 pygame.mixer.Sound.set_volume(init.oof, 0.8)
-ohno                    = pygame.mixer.Sound('Sounds/ohno.ogg')
+ohno                    = pygame.mixer.Sound('Sounds/klaxon.ogg')
 pygame.mixer.Sound.set_volume(init.ohno, 0.7)
 
 muteVerif                   = False
@@ -118,4 +118,4 @@ front.add(line2)
 front.add(catapulteAvant)
 
 # Lancement de la fenêtre d'infos
-import functions.infoWindow
+#import functions.infoWindow
